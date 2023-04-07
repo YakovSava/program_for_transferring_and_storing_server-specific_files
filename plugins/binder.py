@@ -1,7 +1,7 @@
 import asyncio
 
-from os import listdir
-from os.path import isdir, exists
+from os import listdir, mkdir
+from os.path import isdir, join, exists
 from typing import Literal, AnyStr
 from aiofiles import open as aiopen
 
@@ -10,7 +10,8 @@ class BinderGetter:
     def __init__(self,
         path:str='/'
     ):
-        self._path = path
+        if isdir(path):
+            mkdir(path)
 
     async def read(self, filename:str, binary:bool=False) -> Literal[str, bytes]:
         if binary:
@@ -37,6 +38,13 @@ class Binder:
         self._getter = getter(path=path)
         self._loop = loop
         self._path = path
+
+    async def get_all_files(self) -> list[bytes]:
+        return [await self.read(join(self._path, file)) for file in (listdir(self._path))]
+
+    async def get_file(self, filename:str) -> bytes:
+        if exists(join(self._path, filename)):
+            return await self.read(join(self._path, filename))
 
     def __getattr__(self, name:str):
         if hasattr(self._getter, name):

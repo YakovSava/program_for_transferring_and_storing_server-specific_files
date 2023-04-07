@@ -1,9 +1,11 @@
 #  import asyncio
 
 from aiohttp.web import Application, RouteTableDef, run_app, Response, json_response, Request
+from plugins.binder import Binder
 
 app = Application()
 routes = RouteTableDef()
+binder = Binder(path='/files')
 
 @routes.get('/')
 async def main_page(request:Request):
@@ -11,11 +13,12 @@ async def main_page(request:Request):
 
 @routes.get('/file?')
 async def get_file(request:Request):
-    return Response(body=f'{str(request.url).split("?")[-1]}')
+    file_bytes_data = await binder.get_file(await binder.get_file(str(request.url).split('?')[-1]))
+    return Response(body=file_bytes_data)
 
 @routes.get('/service?')
 async def service_path(request:Request):
-    return json_response(data={'response': 'test'})
+    return Response(body='Aaaaa')
 
 if __name__ == '__main__':
     app.add_routes(routes)
