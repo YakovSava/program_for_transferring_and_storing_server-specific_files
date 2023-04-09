@@ -10,7 +10,7 @@ binder = Binder(path='/files')
 
 @routes.get('/')
 async def main_page(request: Request):
-    return Response(body='A' + ('a' * (100 * 100)))
+    return Response(body="Server running!")
 
 
 @routes.get('/file?')
