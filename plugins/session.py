@@ -5,6 +5,7 @@ from aiofiles import open as aiopen
 from plugins.html import Pagenator
 
 routes = RouteTableDef()
+page = Pagenator()
 
 def _protector(data:str) -> str:
     def _check_cruck(string:str) -> bool:
@@ -36,3 +37,21 @@ async def main_user(request:Request):
     user, token = str(request.url).split('?')[1].split('&')
     all_tokens = await _get_token_file()
     if token in all_tokens['sessions']:
+        await page.get_page('index.html')
+
+@routes.get('/api')
+async def api_page(request:Request):
+    '''
+    url path:
+    http://your_ip.com/api?method=<method>&data=<data>
+    '''
+    def _join_string(string:str) -> dict:
+        string = string.replace('&', ', ')
+        '''
+        Input:
+            method=
+        '''
+        return eval(f'dict({string})')
+    data = str(request.url).split('?')[1]
+    data = _join_string(data)
+    user, password = data['data']['user'], data['data']['password']
