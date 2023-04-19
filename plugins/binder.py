@@ -39,13 +39,9 @@ class Binder:
         self._loop = loop
         self._path = path
 
-    async def get_all_files(self) -> list[bytes]:
-        return [await self.read(join(self._path, file)) for file in (listdir(self._path))]
-
     async def get_file(self, filename:str) -> bytes:
         if exists(join(self._path, filename)):
-            return await self.read(join(self._path, filename))
+            return await self._getter.read(join(self._path, filename))
 
-    def __getattr__(self, name:str):
-        if hasattr(self._getter, name):
-            return getattr(self._getter, name)
+    async def get_all_paths(self) -> list['str']:
+        return listdir(self._path)
