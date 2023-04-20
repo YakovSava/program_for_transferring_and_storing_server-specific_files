@@ -1,4 +1,4 @@
-from os import mkdir
+from os import mkdir, listdir
 from os.path import isdir, join
 from aiofiles import open as aiopen
 
@@ -36,3 +36,14 @@ class Pagenator:
                 'body': await file.read(),
                 'content-type': ('image/png' if filename.endswith('.png') else 'image/jpeg')
             }
+
+    async def get_files_and_paths(self) -> list[list]:
+        final_listdir = []
+        for dir in listdir('files'):
+            if isdir(join('files', dir)):
+                for dir2 in listdir(dir):
+                    if isdir(join('files', dir, dir2)):
+                        for files in dir2:
+                            if files.endswith(('.png', '.jpg', '.jpeg')):
+                                final_listdir.append([[dir, dir2], join('png', dir, dir2, files)])
+        return final_listdir

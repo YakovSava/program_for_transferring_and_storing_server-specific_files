@@ -71,7 +71,57 @@ async def api_page(request:Request):
     if tokens.get(user) is not None:
         if tokens[user]['password'] == sha256(password.encode()).hexdigest():
             if data['method'] == 'getFilesList':
-                return json_response(data={'response': []})
+                '''
+                Response:
+                    {'response': [
+                        [['architector', 'filename'], 'png/path/to/png'],
+                        [['architector2', 'filename2'], 'png/path/to/png2'],
+                        [['architector3', 'filename3'], 'png/path/to/png3']
+                    ]}
+                '''
+                return json_response(data={'response': await page.get_files_and_paths()})
+            elif data['method'] == 'test':
+                return json_response(data={'response': 'Ok!'})
+            elif data['method'] == 'addNewWorker':
+                '''
+                Data example:
+                    {
+                        'method': 'addNewWorker',
+                        'data': {
+                            'user': 'apiKey',
+                            'password': '**************************',
+                            'new': ['NewUserName', 'NewUserPassword', userStatus(1)]
+                                // 1 - architector
+                                // 2 - manager
+                                // 3 - admin
+                        }
+                    }
+                '''
+                new_user_name, new_user_password, new_user_status = data['data']['new']
+                tokens = await _get_token_file()
+                if tokens.get(new_user_name) is not None:
+                    return json_response(data={'error': 'This worker exists!'})
+                tokens[new_user_name] = {'password': sha256(new_user_password.encode()).hexdigest(), 'status': new_user_status}
+                await _set_token_file(tokens)
+                return json_response(data={'response': 1})
+            elif data['method'] == 'deleteWorker':
+                '''
+                Example data:
+                    {
+                        'method': 'addNewWorker',
+                        'data': {
+                            'user': 'apiKey',
+                            'password': '**************************',
+                            'delete': ['UserName', 'UserPassword']
+                    }
+                '''
+                user_name, user_password = data['data']['delete']
+                tokens = await _get_token_file()
+                if tokens.get(user_name) is not None:
+                    return json_response(data={'error': 'This worker not exists!'})
+                if sha256(user_password.encode()).hexdigest() != tokens[user_name]['password']:
+                    return json_response(data={'error': 'Wrong password!'})
+
         else:
             return json_response(data={'error': 'Access denied!'})
     else:
