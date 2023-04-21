@@ -9,7 +9,7 @@ authorizer = DummyAuthorizer()
 handler = FTPHandler
 handler.authorizer = authorizer
 handler.banner = "Добро пожаловать на сервер!"
-with open('../tokens.toml', 'r', encoding='utf-8') as file:
+with open('tokens.toml', 'r', encoding='utf-8') as file:
     data = loads(file.read())
 
 for username, data in list(data.items()):

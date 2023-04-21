@@ -108,7 +108,7 @@ async def api_page(request:Request):
                 '''
                 Example data:
                     {
-                        'method': 'addNewWorker',
+                        'method': 'deleteWorker',
                         'data': {
                             'user': 'apiKey',
                             'password': '**************************',
