@@ -1,4 +1,4 @@
-from hashlib import sha256
+# from hashlib import sha256
 from toml import loads, dumps
 from typing import NoReturn
 from aiohttp.web import RouteTableDef, Request, Response, json_response
@@ -21,12 +21,12 @@ def _protector(data:str) -> str:
     return data
 
 async def _get_token_file() -> dict:
-    async with aiopen('tokens.toml', 'r', encoding='utf-8') as file:
+    async with aiopen('../tokens.toml', 'r', encoding='utf-8') as file:
         try: return loads(await file.read())
         except: return loads(_protector(await file.read()))
 
 async def _set_token_file(datas:dict) -> NoReturn:
-    async with aiopen('tokens.toml', 'r', encoding='utf-8') as file:
+    async with aiopen('../tokens.toml', 'r', encoding='utf-8') as file:
         await file.write(dumps(datas))
 
 @routes.get('/user')
@@ -69,7 +69,7 @@ async def api_page(request:Request):
     user, password = data['data']['user'], data['data']['password']
     tokens = await _get_token_file()
     if tokens.get(user) is not None:
-        if tokens[user]['password'] == sha256(password.encode()).hexdigest():
+        if tokens[user]['password'] == password: # sha256(password.encode()).hexdigest()
             if data['method'] == 'getFilesList':
                 '''
                 Response:
@@ -101,7 +101,7 @@ async def api_page(request:Request):
                 tokens = await _get_token_file()
                 if tokens.get(new_user_name) is not None:
                     return json_response(data={'error': 'This worker exists!'})
-                tokens[new_user_name] = {'password': sha256(new_user_password.encode()).hexdigest(), 'status': new_user_status}
+                tokens[new_user_name] = {'password': new_user_password, 'status': new_user_status} # sha256(new_user_password.encode()).hexdigest()
                 await _set_token_file(tokens)
                 return json_response(data={'response': 1})
             elif data['method'] == 'deleteWorker':
@@ -119,9 +119,13 @@ async def api_page(request:Request):
                 tokens = await _get_token_file()
                 if tokens.get(user_name) is not None:
                     return json_response(data={'error': 'This worker not exists!'})
-                if sha256(user_password.encode()).hexdigest() != tokens[user_name]['password']:
+                if user_password != tokens[user_name]['password']: # sha256(user_password.encode()).hexdigest()
                     return json_response(data={'error': 'Wrong password!'})
-
+                del tokens[user_name]
+                await _set_token_file(tokens)
+                return json_response(data={'response': 1})
+            else:
+                return json_response(data={'error': 'Invalid method!'})
         else:
             return json_response(data={'error': 'Access denied!'})
     else:
