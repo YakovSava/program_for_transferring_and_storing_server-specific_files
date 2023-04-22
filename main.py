@@ -14,7 +14,6 @@ async def main_page(request: Request):
     return Response(body="Server running!")
 
 
-
 if __name__ == '__main__':
     th = Thread(target=starter)
     th.start()

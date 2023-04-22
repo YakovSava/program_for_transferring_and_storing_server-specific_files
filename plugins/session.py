@@ -8,11 +8,15 @@ from plugins.html import Pagenator
 routes = RouteTableDef()
 page = Pagenator()
 
-def _protector(data:str) -> str:
-    def _check_cruck(string:str) -> bool:
-        try: loads(string)
-        except: return True
-        else: return False
+
+def _protector(data: str) -> str:
+    def _check_cruck(string: str) -> bool:
+        try:
+            loads(string)
+        except:
+            return True
+        else:
+            return False
 
     tmp = data.split('\n')
     while _check_cruck(data):
@@ -20,17 +24,22 @@ def _protector(data:str) -> str:
         tmp = tmp[:-1]
     return data
 
+
 async def _get_token_file() -> dict:
     async with aiopen('../tokens.toml', 'r', encoding='utf-8') as file:
-        try: return loads(await file.read())
-        except: return loads(_protector(await file.read()))
+        try:
+            return loads(await file.read())
+        except:
+            return loads(_protector(await file.read()))
 
-async def _set_token_file(datas:dict) -> NoReturn:
+
+async def _set_token_file(datas: dict) -> NoReturn:
     async with aiopen('../tokens.toml', 'r', encoding='utf-8') as file:
         await file.write(dumps(datas))
 
+
 @routes.get('/user')
-async def main_user(request:Request):
+async def main_user(request: Request):
     '''
     url path:
     http://your_ip.com/user?<username>&<session token>
@@ -40,18 +49,19 @@ async def main_user(request:Request):
     if token in all_tokens['sessions']['name']:
         await page.get_page('index.html')
 
+
 @routes.get('/api')
-async def api_page(request:Request):
+async def api_page(request: Request):
     '''
     url path:
     http://your_ip.com/api?method=<method>&data=<data>
     '''
-    def _join_string(string:str) -> dict:
+    def _join_string(string: str) -> dict:
         string = '"' + (string
-                    .replace('=', '"="')
-                    .replace('&', '", "')
-                    .replace('"{', '{')
-                )
+                        .replace('=', '"="')
+                        .replace('&', '", "')
+                        .replace('"{', '{')
+                        )
         '''
         Input:
             method=exampleMethod&data={'aaa': 'bbb'}
@@ -69,7 +79,8 @@ async def api_page(request:Request):
     user, password = data['data']['user'], data['data']['password']
     tokens = await _get_token_file()
     if tokens.get(user) is not None:
-        if tokens[user]['password'] == password: # sha256(password.encode()).hexdigest()
+        # sha256(password.encode()).hexdigest()
+        if tokens[user]['password'] == password:
             if data['method'] == 'getFilesList':
                 '''
                 Response:
@@ -101,7 +112,9 @@ async def api_page(request:Request):
                 tokens = await _get_token_file()
                 if tokens.get(new_user_name) is not None:
                     return json_response(data={'error': 'This worker exists!'})
-                tokens[new_user_name] = {'password': new_user_password, 'status': new_user_status} # sha256(new_user_password.encode()).hexdigest()
+                # sha256(new_user_password.encode()).hexdigest()
+                tokens[new_user_name] = {
+                    'password': new_user_password, 'status': new_user_status}
                 await _set_token_file(tokens)
                 return json_response(data={'response': 1})
             elif data['method'] == 'deleteWorker':
@@ -119,7 +132,8 @@ async def api_page(request:Request):
                 tokens = await _get_token_file()
                 if tokens.get(user_name) is not None:
                     return json_response(data={'error': 'This worker not exists!'})
-                if user_password != tokens[user_name]['password']: # sha256(user_password.encode()).hexdigest()
+                # sha256(user_password.encode()).hexdigest()
+                if user_password != tokens[user_name]['password']:
                     return json_response(data={'error': 'Wrong password!'})
                 del tokens[user_name]
                 await _set_token_file(tokens)

@@ -134,3 +134,19 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 - `{"error": "Wrong password!"}` Неверный пароль (при удалении рабочего)
 - `{"error": "This worker not exists!"}` Запись рабочего не существует (при удалении)
 - `{"error": "This worker exists!"}` Запись уже существует (при добавлении)
+
+## Древо необходимое для директории `html/`
+```
+html/
+│   index.html
+│
+├───scripts/
+│       script1.js
+│       script2.js
+│       script3.js
+│       script4.js
+│       script5.js
+│
+└───styles/
+        style.css
+```

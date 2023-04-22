@@ -134,3 +134,19 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 - `{"error": "Wrong password!"}` Invalid password (when deleting a worker)
 - `{"error": "This worker not exists!"}` The worker record does not exist (when deleted)
 - `{"error": "This worker exists!"}` The record already exists (when added)
+
+## The tree required for the directory `html/`
+```
+html/
+│   index.html
+│
+├───scripts/
+│       script1.js
+│       script2.js
+│       script3.js
+│       script4.js
+│       script5.js
+│
+└───styles/
+        style.css
+```

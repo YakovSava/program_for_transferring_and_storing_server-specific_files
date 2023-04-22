@@ -15,9 +15,9 @@ with open('tokens.toml', 'r', encoding='utf-8') as file:
 for username, data in list(data.items()):
     if (username in ['sessions', 'apiKey']):
         continue
-    if data['status'] == 1: # architechtor
+    if data['status'] == 1:  # architechtor
         path = f'/files/{username}'
-    elif (data['status'] == 2) or (data['status'] == 3): # Manager OR Admin
+    elif (data['status'] == 2) or (data['status'] == 3):  # Manager OR Admin
         path = 'files/'
     if not isdir(path):
         mkdir(path)
@@ -31,6 +31,7 @@ server.max_cons_per_ip = 5
 
 def starter():
     server.serve_forever()
+
 
 if __name__ == '__main__':
     starter()
