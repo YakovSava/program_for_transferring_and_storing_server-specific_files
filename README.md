@@ -14,6 +14,9 @@
 Данная программа написана на языке программирования Python и запускает сразу сервера на _80_ и _2121_ портах
 <blockquote> 80 - HTTP, 21 - Служебный порт в Linux, потому заменён на 2121 у нас. Порт FTP сервера </blockquote>
 
+## Документация
+Все документация находится [здесь](https://github.com/YakovSava/program_for_transferring_and_storing_server-specific_files/blob/main/docs/api_Rus.md)
+
 <h1 align="center" aria-setsize="50">
     ENG
 </h1>
@@ -29,3 +32,6 @@ etc.
 
 This program is written in the Python programming language and runs servers on _80_ and _21_ ports at once
 <blockquote> 80 is HTTP, 21 is a service port in Linux, so it has been replaced with 2121 here. FTP server port </blockquote>
+
+## Documentation
+All documentation is [here](https://github.com/YakovSava/program_for_transferring_and_storing_server-specific_files/blob/main/docs/api_Eng.md)

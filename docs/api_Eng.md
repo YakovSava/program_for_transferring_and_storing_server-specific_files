@@ -1,7 +1,7 @@
 # List of API methods, how to access them and why no one will read it?
 On this page, API methods will be provided, how to pass parameters in them, code examples.
 Notes:
-- The domain name in the examples is not used here. I.e. the name in the example should be: `http://yourip.com/api?method =...&data=...`, however, only `/api?method= will be specified in the examples...&data=...`
+- The domain name in the examples is not used here. I.e. the name in the example should be: `http://yourip.com/api?method=...&data=...`, however, only `/api?method=...&data=...` will be specified in the examples
 - Examples will be for programming languages *Python* and *JavaScript*
 
 ## Let's move from words to deeds
@@ -40,7 +40,7 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 `/api?method=getFilesList&data={'user': 'apiKey', 'password': '******************'}`
 Let's analyze this line in more detail:
 `getFilesList` is a method that obviously returns JSON, inside which the following data is located:
-``json
+```json
 {"response": [
   [["architector name", "path name"], "png/path/to/png"],
   [["architector name 2", "path name"], "png/path/to/png2"],
@@ -81,8 +81,8 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 
 `/api?method=addNewWorker&data={'user': 'apiKey', 'password': '******************', 'new': ['UserName', 'UserPassword', 1]}`
 Some specific data is already being transmitted here, let's look at them:
-``json lines
-    "new": ["UserName", "UserPassword", 1]}
+```json lines
+    "new": ["UserName", "UserPassword", 1]
 ```
 What's what and how to figure it out? It's very simple!
 - `UserName` - It will obviously be thought that this is the username and you will be absolutely right!

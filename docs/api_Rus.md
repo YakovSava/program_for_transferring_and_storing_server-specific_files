@@ -82,7 +82,7 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 `/api?method=addNewWorker&data={'user': 'apiKey', 'password': '******************', 'new': ['UserName', 'UserPassword', 1]}`
 Тут уже передаются какие-то специфические данные, давайте их рассмотрим:
 ```json lines
-    "new": ["UserName", "UserPassword", 1]}
+    "new": ["UserName", "UserPassword", 1]
 ```
 Что тут что и как тут разобраться? Всё очень просто!
 - `UserName` - Очевидно будет подумать что это имя пользователя и вы будете абсолютно правы!
