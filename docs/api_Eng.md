@@ -50,8 +50,8 @@ Let's analyze this line in more detail:
 
 Here we get:
 - `architect name` - The name of the architect whose directory contains this directory
-- `path name' - Directory with all the main files 
-- `png/path/to/png' - Link to the image to be inserted into src
+- `path name` - Directory with all the main files 
+- `png/path/to/png` - Link to the image to be inserted into src
 
 #### Code examples
 ```python
@@ -125,6 +125,35 @@ xhr.send();
 if (xhr.readyState === 4 && xhr.status === 200) {
     let data = JSON.parse(xhr.responseText);
     console.log(data.response); // 1
+}
+```
+
+## Getting the size of uploaded files
+`/api?method=getfilesize&data={'user': 'apiKey', 'password': '******************'}`
+This method (`getfilesize`) returns the number of files uploaded by all users. The response will be the following line:
+``json
+{
+    "response": 56782 // The response is returned in bytes
+}
+``
+
+### Code examples
+```Python
+from requests import get
+
+data = get(".../api?method=getFileSizes&data={'user': 'apiKey', 'password': '******************'}").json()
+print(data['response']) # 56782
+```
+
+```javascript
+var xhr = new XMLHttpRequest();
+
+xhr.open('GET', ".../api?method=getFileSizes&data={'user': 'apiKey', 'password': '******************'}", false);
+xhr.send();
+
+if (xhr.readyState === 4 && xhr.status === 200) {
+let data = JSON.parse(xhr.responseText);
+console.log(data.response); // 56782
 }
 ```
 

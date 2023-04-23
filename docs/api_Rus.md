@@ -128,6 +128,35 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 }
 ```
 
+## Получение размера загруженных файлов
+`/api?method=getFileSizes&data={'user': 'apiKey', 'password': '******************'}`
+Данный метод (`getFileSizes`) возвращает количество загруженных файлов всеми пользователями. Ответом будет следующая строка:
+```json
+{
+  "response": 56782 // Ответ возвращается в байтах
+}
+```
+
+### Примеры кода
+```Python
+from requests import get
+
+data = get(".../api?method=getFileSizes&data={'user': 'apiKey', 'password': '******************'}").json()
+print(data['response']) # 56782
+```
+
+```javascript
+var xhr = new XMLHttpRequest();
+
+xhr.open('GET', ".../api?method=getFileSizes&data={'user': 'apiKey', 'password': '******************'}", false);
+xhr.send();
+
+if (xhr.readyState === 4 && xhr.status === 200) {
+    let data = JSON.parse(xhr.responseText);
+    console.log(data.response); // 56782
+}
+```
+
 ## Некоторые ошибки:
 - `{"error": "Access denied!"}` Нет доступа к методу
 - `{"error": "Invalid method!"}` Неверный метод или неверно написанный метод

@@ -6,7 +6,7 @@ from typing import NoReturn
 from aiohttp.web import RouteTableDef, Request, Response, json_response
 from aiofiles import open as aiopen
 from plugins.html import Pagenator
-from plugins.ftp import authorizer
+from plugins.ftp import authorizer, get_file_size
 
 routes = RouteTableDef()
 page = Pagenator()
@@ -124,7 +124,7 @@ async def api_page(request: Request):
                     path = 'files/'
                 if not isdir(path):
                     mkdir(path)
-                authorizer.add_user(new_user_name, new_user_password, path
+                authorizer.add_user(new_user_name, new_user_password, path)
                 await _set_token_file(tokens)
                 return json_response(data={'response': 1})
             elif data['method'] == 'deleteWorker':
@@ -146,8 +146,11 @@ async def api_page(request: Request):
                 if user_password != tokens[user_name]['password']:
                     return json_response(data={'error': 'Wrong password!'})
                 del tokens[user_name]
+                authorizer.remove_user(user_name)
                 await _set_token_file(tokens)
                 return json_response(data={'response': 1})
+            elif data['method'] == 'getFileSizes':
+                return json_response(data={'response': get_file_size()})
             else:
                 return json_response(data={'error': 'Invalid method!'})
         else:
