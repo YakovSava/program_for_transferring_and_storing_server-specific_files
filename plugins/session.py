@@ -1,9 +1,12 @@
 # from hashlib import sha256
+from os import mkdir
+from os.path import isdir
 from toml import loads, dumps
 from typing import NoReturn
 from aiohttp.web import RouteTableDef, Request, Response, json_response
 from aiofiles import open as aiopen
 from plugins.html import Pagenator
+from plugins.ftp import authorizer
 
 routes = RouteTableDef()
 page = Pagenator()
@@ -115,6 +118,13 @@ async def api_page(request: Request):
                 # sha256(new_user_password.encode()).hexdigest()
                 tokens[new_user_name] = {
                     'password': new_user_password, 'status': new_user_status}
+                if new_user_status == 1:  # architechtor
+                    path = f'/files/{new_user_name}'
+                elif (new_user_status == 2) or (new_user_status == 3):  # Manager OR Admin
+                    path = 'files/'
+                if not isdir(path):
+                    mkdir(path)
+                authorizer.add_user(new_user_name, new_user_password, path
                 await _set_token_file(tokens)
                 return json_response(data={'response': 1})
             elif data['method'] == 'deleteWorker':
