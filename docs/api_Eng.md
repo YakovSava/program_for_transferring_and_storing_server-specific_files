@@ -178,4 +178,6 @@ html/
 │
 └───styles/
         style.css
+        reset.scss
+        locker.scss
 ```
