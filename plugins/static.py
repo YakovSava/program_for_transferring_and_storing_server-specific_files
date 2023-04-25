@@ -6,7 +6,11 @@ get = Pagenator()
 
 @routes.get('/styles/')
 async def styles_handler(request:Request):
-    data = await get.get_css(str(request.url).split('/')[-1])
+    url = str(request.url)
+    if url.endswith('.scss'):
+        data = await get.get_sass(url.split('/')[-1])
+    else:
+        data = await get.get_css(url.split('/')[-1])
     return Response(**data)
 
 @routes.get('/script/')

@@ -1,5 +1,6 @@
 from os import mkdir, listdir
 from os.path import isdir, join
+from sass import compile
 from aiofiles import open as aiopen
 
 
@@ -18,14 +19,21 @@ class Pagenator:
             }
 
     async def get_css(self, css_filename: str) -> dict:
-        async with aiopen(join(self._path, css_filename), 'r', encoding='utf-8') as file:
+        async with aiopen(join(self._path, 'styles', css_filename), 'r', encoding='utf-8') as file:
             return {
                 'body': await file.read(),
                 'content_type': 'text/css'
             }
 
+    async def get_sass(self, scss_filename:str) -> dict:
+        async with aiopen(join(self._path, 'styles', scss_filename), 'r', encoding='utf-8') as file:
+            return {
+                'body': compile(string=await file.read()),
+                'content_type': 'text/css'
+            }
+
     async def get_js(self, js_filename: str) -> dict:
-        async with aiopen(join(self._path, js_filename), 'r', encoding='utf-8') as file:
+        async with aiopen(join(self._path, 'scripts', js_filename), 'r', encoding='utf-8') as file:
             return {
                 'body': await file.read(),
                 'content_type': 'text/javascript'
