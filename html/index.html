@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>hosting</title>
+	<link rel="stylesheet" href="styles/style.scss">
+</head>
+
+<body>
+	<form>
+		<table class="table">
+			<tbody class="table__tbody">
+				<tr>
+					<td class="table__td" colspan="3">Фильтр
+						на сайте</td>
+				</tr>
+				<tr>
+					<td>Этажность
+						<table>
+							<tbody class="white">
+								<tr>
+									<td colspan="2">От - До</td>
+								</tr>
+								<tr>
+									<td>
+										<input name="filters[]" type="number" placeholder="1.0" step="0.1" min="0">
+									</td>
+									<td>
+										<input name="filters[]" type="number" placeholder="1.0" step="0.1" min="0">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+					<td>Размер дома
+						<table>
+							<tbody class="white">
+								<tr>
+									<td colspan="2">От - До</td>
+								</tr>
+								<tr>
+									<td>
+										<input name="filters[]" type="number" placeholder="1.0" step="0.1" min="0">
+									</td>
+									<td>
+										<input name="filters[]" type="number" placeholder="1.0" step="0.1" min="0">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+					<td>Площадь дома
+						<table>
+							<tbody class="white">
+								<tr>
+									<td colspan="2">От - До</td>
+								</tr>
+								<tr>
+									<td>
+										<input name="filters[]" type="number" placeholder="1.0" step="0.1" min="0">
+									</td>
+									<td>
+										<input name="filters[]" type="number" placeholder="1.0" step="0.1" min="0">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button>Send</button>
+	</form>
+</body>
+
+</html>

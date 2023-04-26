@@ -1,0 +1,14 @@
+.table {
+    background-color: #d0e4fc;
+    text-align: center;
+    font-weight: 600;
+}
+table {
+    & td {
+        border: solid 1px;
+    }
+}
+
+.white {
+    background-color: #fff;
+}
