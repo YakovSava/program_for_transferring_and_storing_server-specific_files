@@ -37,7 +37,7 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 ```
 
 ### Получение списка файлов и ссылок на картинки
-`/api?method=getFilesList&data={'user': 'apiKey', 'password': '******************'}`
+`/api?method=getFilesList&data={'user': 'apiKey', 'password': '******************', 'filters': [[1.5,1.5],[2,7],[1,5]]}`
 Разберём эту строку подробнее:
 `getFilesList` - Это метод который, очевидно, возвращает JSON, внутри которого находятся следующие данные:
 ```json
@@ -57,14 +57,14 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 ```python
 from requests import get
 
-data = get(".../api?method=getFilesList&data={'user': 'apiKey', 'password': '******************'}").json()
+data = get(".../api?method=getFilesList&data={'user': 'apiKey', 'password': '******************', 'filters': [[1.5,1.5],[2,7],[1,5]]}").json()
 print(data['response']) # [[["architector name", "path name"], "png/path/to/png"], [["architector name 2", "path name"], "png/path/to/png2"], [["architector name 3", "path name"], "png/path/to/png3"]] 
 ```
 
 ```javascript
 var xhr = new XMLHttpRequest();
 
-xhr.open('GET', ".../api?method=getFilesList&data={'user': 'apiKey', 'password': '******************'}", false);
+xhr.open('GET', ".../api?method=getFilesList&data={'user': 'apiKey', 'password': '******************', 'filters': [[1.5,1.5],[2,7],[1,5]]}", false);
 xhr.send();
 
 if (xhr.readyState === 4 && xhr.status === 200) {
