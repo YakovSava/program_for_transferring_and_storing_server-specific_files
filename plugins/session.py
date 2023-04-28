@@ -93,7 +93,7 @@ async def api_page(request: Request):
                         [['architector3', 'filename3'], 'png/path/to/png3']
                     ]}
                 '''
-                return json_response(data={'response': await page.get_files_and_paths()})
+                return json_response(data={'response': await page.get_files_and_paths(data['filters'])})
             elif data['method'] == 'test':
                 return json_response(data={'response': 'Ok!'})
             elif data['method'] == 'addNewWorker':
