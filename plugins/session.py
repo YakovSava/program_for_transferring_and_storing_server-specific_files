@@ -151,6 +151,16 @@ async def api_page(request: Request):
                 return json_response(data={'response': 1})
             elif data['method'] == 'getFileSizes':
                 return json_response(data={'response': get_file_size()})
+            elif data['method'] == 'autorize':
+                async with aiopen('tokens.toml', 'r', encoding='utf-8') as file:
+                    tokens = loads(await file.read())
+                if data['data']['autorize']['username'] in tokens:
+                    if (data['data']['autorize']['password'] == tokens[data['data']['autorize']['username']]['password']) and (tokens[data['data']['autorize']['username']]['status'] >= 2):
+                        return json_response(data={'response': 1})
+                    else:
+                        return json_response(data={'response': 0})
+                else:
+                    return json_response(data={'response': 0})
             else:
                 return json_response(data={'error': 'Invalid method!'})
         else:
