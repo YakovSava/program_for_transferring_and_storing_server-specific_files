@@ -41,11 +41,12 @@ if (xhr.readyState === 4 && xhr.status === 200) {
 Let's analyze this line in more detail:
 `getFilesList` is a method that obviously returns JSON, inside which the following data is located:
 ```json
-{"response": [
-  [["architector name", "path name"], "png/path/to/png"],
-  [["architector name 2", "path name"], "png/path/to/png2"],
-  [["architector name 3", "path name"], "png/path/to/png3"]
-]}
+{"response": {
+    "architector": ["filename", "png/path/to/png"],
+    "architector2": ["filename2", "png/path/to/png2"], 
+    "architector3": ["filename3", "png/path/to/png3"]
+  }
+}
 ```
 
 Here we get:

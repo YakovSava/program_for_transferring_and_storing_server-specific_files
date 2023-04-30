@@ -1,9 +1,10 @@
 # from hashlib import sha256
 from os import mkdir
 from os.path import isdir
+from json import loads as jloads
 from toml import loads, dumps
 from typing import NoReturn
-from aiohttp.web import RouteTableDef, Request, Response, json_response
+from aiohttp.web import RouteTableDef, Request, json_response
 from aiofiles import open as aiopen
 from plugins.html import Pagenator
 from plugins.ftp import authorizer, get_file_size
@@ -61,9 +62,9 @@ async def api_page(request: Request):
     '''
     def _join_string(string: str) -> dict:
         string = '"' + (string
-                        .replace('=', '"="')
-                        .replace('&', '", "')
-                        .replace('"{', '{')
+                        .replace('=', '="')
+                        .replace('&', '", ')
+                        .replace('}', '}"')
                         )
         '''
         Input:
@@ -76,7 +77,9 @@ async def api_page(request: Request):
                 }
             }
         '''
-        return eval(f'dict({string})')
+        _temp = eval(f'dict({string})')
+        _temp['data'] = jloads(_temp['data'])
+        return _temp
     data = str(request.url).split('?')[1]
     data = _join_string(data)
     user, password = data['data']['user'], data['data']['password']
@@ -87,11 +90,13 @@ async def api_page(request: Request):
             if data['method'] == 'getFilesList':
                 '''
                 Response:
-                    {'response': [
-                        [['architector', 'filename'], 'png/path/to/png'],
-                        [['architector2', 'filename2'], 'png/path/to/png2'],
-                        [['architector3', 'filename3'], 'png/path/to/png3']
-                    ]}
+                    {'response': 
+                        {
+                            'architector': ['filename', 'png/path/to/png'],
+                            'architector2': ['filename2', 'png/path/to/png2'],
+                            'architector3': ['filename3', 'png/path/to/png3']
+                        }
+                    }
                 '''
                 return json_response(data={'response': await page.get_files_and_paths(data['filters'])})
             elif data['method'] == 'test':
@@ -152,8 +157,7 @@ async def api_page(request: Request):
             elif data['method'] == 'getFileSizes':
                 return json_response(data={'response': get_file_size()})
             elif data['method'] == 'autorize':
-                async with aiopen('tokens.toml', 'r', encoding='utf-8') as file:
-                    tokens = loads(await file.read())
+                tokens = await _get_token_file()
                 if data['data']['autorize']['username'] in tokens:
                     if (data['data']['autorize']['password'] == tokens[data['data']['autorize']['username']]['password']) and (tokens[data['data']['autorize']['username']]['status'] >= 2):
                         return json_response(data={'response': 1})
