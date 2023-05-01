@@ -9,6 +9,7 @@ app = Application()
 routes = RouteTableDef()
 bind = Binder()
 
+
 @routes.get('/')
 async def main_page(request: Request):
     data = await bind.get_page('index.html')

@@ -1,0 +1,71 @@
+.container {
+  margin: 0 auto;
+  max-width: 1280px;
+  position: relative;
+}
+
+.table {
+  background-color: #d0e4fc;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 24px;
+}
+
+.blur {
+  filter: blur(20px);
+}
+
+.active {
+  display: block;
+}
+
+table td {
+  border: solid 1px;
+}
+
+input {
+  max-width: clamp(6.25rem, 4.167rem + 10.42vw, 12.5rem);
+}
+
+.white {
+  background-color: #fff;
+}
+
+.main__images {
+  margin: 64px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.main__image {
+  display: grid;
+}
+.main__image img {
+  border-radius: 16px;
+}
+
+.pop-up-autorize {
+  display: none;
+}
+.pop-up-autorize__form {
+  position: absolute;
+  left: calc(50% - 170px);
+  top: 128px;
+  display: grid;
+  background-color: #fff;
+  padding: 64px;
+  border-radius: 16px;
+  box-shadow: 0 0 16px 16px rgba(0, 0, 0, 0.1294117647);
+}
+.pop-up-autorize__login {
+  margin-bottom: 16px;
+}
+.pop-up-autorize__pass {
+  margin-bottom: 24px;
+}
+.pop-up-autorize input {
+  border: solid 1px;
+}
+.pop-up-autorize label {
+  text-align: center;
+  margin-bottom: 24px;
+}
