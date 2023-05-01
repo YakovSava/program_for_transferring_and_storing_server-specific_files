@@ -15,6 +15,11 @@ async def main_page(request: Request):
     data = await bind.get_page('index.html')
     return Response(**data)
 
+@routes.post('/')
+async def main_page(request: Request):
+    data = await bind.get_page('index.html')
+    return Response(**data)
+
 
 if __name__ == '__main__':
     th = Thread(target=starter)

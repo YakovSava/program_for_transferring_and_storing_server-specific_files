@@ -1,6 +1,7 @@
 # from hashlib import sha256
 from os import mkdir
 from os.path import isdir
+from urllib.parse import unquote
 from json import loads as jloads
 from toml import loads, dumps
 from typing import NoReturn
@@ -30,7 +31,7 @@ def _protector(data: str) -> str:
 
 
 async def _get_token_file() -> dict:
-    async with aiopen('../tokens.toml', 'r', encoding='utf-8') as file:
+    async with aiopen('tokens.toml', 'r', encoding='utf-8') as file:
         try:
             return loads(await file.read())
         except:
@@ -38,7 +39,7 @@ async def _get_token_file() -> dict:
 
 
 async def _set_token_file(datas: dict) -> NoReturn:
-    async with aiopen('../tokens.toml', 'r', encoding='utf-8') as file:
+    async with aiopen('tokens.toml', 'r', encoding='utf-8') as file:
         await file.write(dumps(datas))
 
 
@@ -61,10 +62,9 @@ async def api_page(request: Request):
     http://your_ip.com/api?method=<method>&data=<data>
     '''
     def _join_string(string: str) -> dict:
-        string = '"' + (string
-                        .replace('=', '="')
-                        .replace('&', '", ')
-                        .replace('}', '}"')
+        string = (string
+                        .replace('=', '=\'')
+                        .replace('&', '\', ')
                         )
         '''
         Input:
@@ -77,7 +77,8 @@ async def api_page(request: Request):
                 }
             }
         '''
-        _temp = eval(f'dict({string})')
+        _temp = unquote(string) + "\'"
+        _temp = eval(f'dict({_temp})')
         _temp['data'] = jloads(_temp['data'])
         return _temp
     data = str(request.url).split('?')[1]
@@ -98,7 +99,7 @@ async def api_page(request: Request):
                         }
                     }
                 '''
-                return json_response(data={'response': await page.get_files_and_paths(data['filters'])})
+                return json_response(data={'response': await page.get_files_and_paths(data['data']['filters'])})
             elif data['method'] == 'test':
                 return json_response(data={'response': 'Ok!'})
             elif data['method'] == 'addNewWorker':

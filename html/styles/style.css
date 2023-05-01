@@ -12,13 +12,17 @@
 }
 
 .blur {
-  filter: blur(20px);
+  animation: blur 1s forwards;
 }
 
-.active {
-  display: block;
+@keyframes blur {
+  0% {
+    filter: blur(1px);
+  }
+  100% {
+    filter: blur(20px);
+  }
 }
-
 table td {
   border: solid 1px;
 }
@@ -41,6 +45,9 @@ input {
 }
 .main__image img {
   border-radius: 16px;
+}
+.main__btn_1 {
+  text-align: right;
 }
 
 .pop-up-autorize {
@@ -69,3 +76,13 @@ input {
   text-align: center;
   margin-bottom: 24px;
 }
+
+.active {
+  display: block;
+}
+
+.header__btn_1 {
+  margin-top: 24px;
+}
+
+.btn btn-secondary {padding:10px;background:teal;color:white;}
