@@ -67,9 +67,9 @@ async function setter() {
 	for (let i = 0; i < response.length; i++) {
 		text += `<div id="form${i}" class="form">
 		<form>
-			<input type="text" id="username${i}" value="${response[i]}">
-			<input type="text" id="password${i}" value="${response[i]}">
-			<input type="value" id="status${i}" value="${response[i]}">
+			<input type="text" id="username${i}" value="${response[i][0]}">
+			<input type="text" id="password${i}" value="${response[i][1]}">
+			<input type="value" id="status${i}" value="${response[i][2]}">
 		</form>
 		<button class="btn btn-primary" onclick="addWorker(${i})">Добавить</button>
 		<button class="btn btn-primary" onclick="deleteWorker(${i})">Удалить</button>
