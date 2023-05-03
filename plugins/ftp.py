@@ -29,8 +29,10 @@ for username, data in list(data.items()):
         continue
     if data['status'] == 1:  # architechtor
         path = f'/files/{username}'
-    elif (data['status'] == 2) or (data['status'] == 3):  # Manager OR Admin
+    elif (data['status'] == 2):  # Manager
         path = 'files/'
+    elif (data['status'] == 3):
+        path = '/'
     if not isdir(path):
         mkdir(path)
     authorizer.add_user(username, data['password'], path, perm='elradfmwMT')
