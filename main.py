@@ -15,9 +15,9 @@ async def main_page(request: Request):
     data = await bind.get_page('index.html')
     return Response(**data)
 
-@routes.post('/')
+@routes.get('/admin')
 async def main_page(request: Request):
-    data = await bind.get_page('index.html')
+    data = await bind.get_page('admin.html')
     return Response(**data)
 
 
