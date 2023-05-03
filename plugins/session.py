@@ -39,7 +39,7 @@ async def _get_token_file() -> dict:
 
 
 async def _set_token_file(datas: dict) -> NoReturn:
-    async with aiopen('tokens.toml', 'r', encoding='utf-8') as file:
+    async with aiopen('tokens.toml', 'w', encoding='utf-8') as file:
         await file.write(dumps(datas))
 
 
@@ -140,7 +140,8 @@ async def api_page(request: Request):
                 '''
                 user_name, user_password = data['data']['delete']
                 tokens = await _get_token_file()
-                if tokens.get(user_name) is not None:
+
+                if tokens.get(user_name) is None:
                     return json_response(data={'error': 'This worker not exists!'})
                 # sha256(user_password.encode()).hexdigest()
                 if user_password != tokens[user_name]['password']:
@@ -154,6 +155,8 @@ async def api_page(request: Request):
 
                 arrays = []
                 for username, data in list(tokens.items()):
+                    if username in ['sessions', 'apiKey']:
+                        continue
                     arrays.append([username, data['password'], data['status']])
 
                 return json_response(data={'response': arrays})

@@ -1,4 +1,4 @@
-from os import mkdir
+from os import makedirs
 from os.path import isdir, getsize
 from toml import loads
 from pyftpdlib.authorizers import DummyAuthorizer
@@ -34,7 +34,7 @@ for username, data in list(data.items()):
     elif (data['status'] == 3):
         path = '/'
     if not isdir(path):
-        mkdir(path)
+        makedirs(path)
     authorizer.add_user(username, data['password'], path, perm='elradfmwMT')
 
 server = FTPServer(('127.0.0.1', 2121), handler)
@@ -43,14 +43,13 @@ server.max_cons = 256
 server.max_cons_per_ip = 5
 
 def add_new_worker(username, password, status):
-    if status == 1:  # architechtor
-        path = f'./files/{username}'
-    elif (status == 2):  # Manager
-        path = './files/'
-    elif (status == 3):
-        path = './'
+    path = f'/files/{username}' # if architector
+    if (status == 2) and (status == 3):  # Manager
+        path = '/files/'
     if not isdir(path):
-        mkdir(path)
+        makedirs(path)
+    if (status == 3):
+        path = './'
     authorizer.add_user(username, password, path, perm='elradfmwMT')
 
 

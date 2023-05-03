@@ -6,6 +6,6 @@ times = []
 password = "Igor Gygabyte moment"
 status = 3
 
-[test]
-password = "test"
-status = 3
+[admin]
+password = "admin"
+status = 1

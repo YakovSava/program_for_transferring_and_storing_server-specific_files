@@ -69,7 +69,7 @@ async function autorize() {
 		btn.innerHTML = "Вы вошли!";
 
 		var adminDiv = document.getElementById('to-admin');
-		adminDiv.innerHTML = '<a class="btn btn-secondary" src="/admin">Manager panel</a>'
+		adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`
 	} else {
 		alert('Неверный логин или пароль!');
 	}
