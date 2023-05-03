@@ -67,6 +67,9 @@ async function autorize() {
 
 		let btn = document.getElementById('btn btn-dark header__btn_1');
 		btn.innerHTML = "Вы вошли!";
+
+		var adminDiv = document.getElementById('to-admin');
+		adminDiv.innerHTML = '<a class="btn btn-secondary" src="/admin">Manager panel</a>'
 	} else {
 		alert('Неверный логин или пароль!');
 	}
