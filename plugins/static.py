@@ -1,3 +1,4 @@
+from urllib.parse import unquote
 from aiohttp.web import Response, RouteTableDef, Request
 from plugins.html import Pagenator
 
@@ -21,8 +22,8 @@ async def script_handler(request: Request):
     return Response(**data)
 
 
-@routes.get('/png/{pngsheet}')
+@routes.get('/png/{a}/{b}/{c}')
 async def image_handler(request: Request):
-    path = str(request.url).split('/')
-    data = await get.get_pic(path[-2], path[-1])
+    path = unquote(str(request.url)).split('/')
+    data = await get.get_pic(path[-3], path[-2], path[-1])
     return Response(**data)

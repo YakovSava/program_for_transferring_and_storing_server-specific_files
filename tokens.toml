@@ -8,4 +8,4 @@ status = 3
 
 [admin]
 password = "admin"
-status = 1
+status = 3

@@ -3,6 +3,20 @@ from os.path import isdir, join
 from sass import compile
 from aiofiles import open as aiopen
 
+def _split_a_string(string:str) -> dict:
+    raw_path_parameters = string.rsplit('-', 4)
+    path_parameters = {
+        'initials': raw_path_parameters[0],
+        'floors': eval(raw_path_parameters[1].replace(',', '.')),
+        'size': eval((raw_path_parameters[2]
+                      .replace('x', '*')
+                      .replace('х', '*')
+                      .replace(',', '.'))),
+        'area': eval(raw_path_parameters[3].replace(',', '.')),
+        'surname': raw_path_parameters[4]
+    }
+
+    return path_parameters
 
 class Pagenator:
 
@@ -39,41 +53,27 @@ class Pagenator:
                 'content_type': 'text/javascript'
             }
 
-    async def get_pic(self, path: str, filename: str) -> dict:
-        async with aiopen(join(self._path, path, filename), 'rb') as file:
+    async def get_pic(self, *paths:tuple[str]) -> dict:
+        async with aiopen(join('files', *paths), 'rb') as file:
             return {
                 'body': await file.read(),
-                'content_type': ('image/png' if filename.endswith('.png') else 'image/jpeg')
+                'content_type': ('image/png' if paths[-1].endswith('.png') else 'image/jpeg')
             }
 
     async def get_files_and_paths(self, filters: list=None) -> list[list]:
         final_listdir = []
-        for dir in listdir('files'):
-            if isdir(join('files', dir)):
-                for dir2 in listdir(dir):
-                    if isdir(join('files', dir, dir2)):
-                        raw_path_parameters = dir2.split('-')
-                        path_parameters = {
-                            'initials': raw_path_parameters[0],
-                            'floors': int(raw_path_parameters[1]),
-                            'size': eval((raw_path_parameters[2]
-                                          .replace('x', '*')
-                                          .replace('х', '*'))),
-                            'area': int(raw_path_parameters[3]),
-                            'surname': raw_path_parameters[4]
-                        }
-
-                        if (filters is None):
-                            for files in dir2:
-                                if files.endswith(('.png', '.jpg', '.jpeg')):
-                                    final_listdir.append(
-                                        [[dir, dir2], join('png', dir, dir2, files)])
-                        else:
-                            if (filters[0][0] > path_parameters['floors'] > filters[0][1])\
-                                    and (filters[1][0] > path_parameters['size'] > filters[1][1])\
-                                    and (filters[2][0] > path_parameters['area'] > filters[2][1]):
-                                for files in dir2:
-                                    if files.endswith(('.png', '.jpg', '.jpeg')):
-                                        final_listdir.append(
-                                            [[dir, dir2], join('png', dir, dir2, files)])
+        for architector_dir in listdir('files'):
+            if isdir(join('files', architector_dir)):
+                for project_dir in listdir(join('files', architector_dir)):
+                    for files in listdir(join('files', architector_dir, project_dir)):
+                        parameters = _split_a_string(project_dir)
+                        # print(parameters, filters)
+                        if (
+                            (filters[0][0] < parameters['floors'] < filters[0][1]) and
+                            (filters[1][0] < parameters['size'] < filters[1][1]) and
+                            (filters[2][0] < parameters['area'] < filters[2][1])
+                        ):
+                            final_listdir.append([
+                                [[architector_dir, project_dir], join('png', architector_dir, project_dir, files)]
+                            ])
         return final_listdir

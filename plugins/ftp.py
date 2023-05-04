@@ -21,26 +21,6 @@ authorizer = DummyAuthorizer()
 handler = FTPAccounant
 handler.authorizer = authorizer
 handler.banner = "Добро пожаловать на сервер!"
-with open('tokens.toml', 'r', encoding='utf-8') as file:
-    data = loads(file.read())
-
-for username, data in list(data.items()):
-    if (username in ['sessions', 'apiKey']):
-        continue
-    if data['status'] == 1:  # architechtor
-        path = f'/files/{username}'
-    elif (data['status'] == 2):  # Manager
-        path = 'files/'
-    elif (data['status'] == 3):
-        path = '/'
-    if not isdir(path):
-        makedirs(path)
-    authorizer.add_user(username, data['password'], path, perm='elradfmwMT')
-
-server = FTPServer(('127.0.0.1', 2121), handler)
-
-server.max_cons = 256
-server.max_cons_per_ip = 5
 
 def add_new_worker(username, password, status):
     path = f'/files/{username}' # if architector
@@ -52,6 +32,18 @@ def add_new_worker(username, password, status):
         path = './'
     authorizer.add_user(username, password, path, perm='elradfmwMT')
 
+with open('tokens.toml', 'r', encoding='utf-8') as file:
+    data = loads(file.read())
+
+for username, data in list(data.items()):
+    if (username in ['sessions', 'apiKey']):
+        continue
+    add_new_worker(username, data['password'], data['status'])
+
+server = FTPServer(('127.0.0.1', 2121), handler)
+
+server.max_cons = 256
+server.max_cons_per_ip = 5
 
 def get_file_size() -> int:
     return handler.files_size
