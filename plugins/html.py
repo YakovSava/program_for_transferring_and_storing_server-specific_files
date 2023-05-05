@@ -77,19 +77,23 @@ class Pagenator:
                         final_listdir.append({
                             'project': project_dir,
                             'autor': architector_dir,
-                            'files': self._get_files_in_directory(listdir(join('files', architector_dir, project_dir)))
+                            'files': self._get_files_in_directory(
+                                listdir(join('files', architector_dir, project_dir)),
+                                architector_dir=architector_dir,
+                                project_dir=project_dir
+                            )
                         })
         return final_listdir
 
-    def _get_files_in_directory(self, files: list[str] | tuple[str]) -> dict:
+    def _get_files_in_directory(self, files: list[str] | tuple[str], architector_dir:str=None, project_dir:str=None) -> dict:
         file_list = {}
 
         for file in files:
             if file.endswith((".jpg", ".png", ".jpeg")):
                 if file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
-                    file_list['a3d'] = file
+                    file_list['a3d'] = join('png', architector_dir, project_dir, file).replace('\\', '/')
                 elif not file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
-                    file_list['two'] = file
+                    file_list['two'] = join('png', architector_dir, project_dir, file).replace('\\', '/')
             if len(file_list) == 2:
                 break
         return file_list
