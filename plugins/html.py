@@ -65,15 +65,43 @@ class Pagenator:
         for architector_dir in listdir('files'):
             if isdir(join('files', architector_dir)):
                 for project_dir in listdir(join('files', architector_dir)):
-                    for files in listdir(join('files', architector_dir, project_dir)):
-                        parameters = _split_a_string(project_dir)
-                        # print(parameters, filters)
-                        if (
-                            (filters[0][0] < parameters['floors'] < filters[0][1]) and
-                            (filters[1][0] < parameters['size'] < filters[1][1]) and
-                            (filters[2][0] < parameters['area'] < filters[2][1])
-                        ):
-                            final_listdir.append([
-                                [[architector_dir, project_dir], join('png', architector_dir, project_dir, files)]
-                            ])
+                    parameters = _split_a_string(project_dir)
+                    # print(parameters, filters)
+                    if (
+                        (filters[0][0] < parameters['floors'] < filters[0][1]) and
+                        (filters[1][0] < parameters['size'] < filters[1][1]) and
+                        (filters[2][0] < parameters['area'] < filters[2][1])
+                    ):
+                        final_listdir.append([
+                            [
+                                [architector_dir, project_dir],
+                                list(
+                                    map(
+                                        lambda x: join('png', architector_dir, project_dir, x),
+                                        self._get_files_in_directory(
+                                            listdir(
+                                                join(
+                                                    'files',
+                                                    architector_dir,
+                                                    project_dir
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ]
+                        ])
         return final_listdir
+
+    def _get_files_in_directory(self, files:list[str] | tuple[str]) -> list[str]:
+        file_list = []
+
+        for file in files:
+            if file.endswith((".jpg", ".png", ".jpeg")):
+                if file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
+                    file_list.append(file)
+                elif not file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
+                    file_list.append(file)
+            if len(file_list) == 2:
+                break
+        return file_list
