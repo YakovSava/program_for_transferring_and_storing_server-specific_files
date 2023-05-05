@@ -99,7 +99,7 @@ class Pagenator:
         for file in files:
             if file.endswith((".jpg", ".png", ".jpeg")):
                 if file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
-                    file_list.append(file)
+                    file_list.insert(0, file)
                 elif not file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
                     file_list.append(file)
             if len(file_list) == 2:

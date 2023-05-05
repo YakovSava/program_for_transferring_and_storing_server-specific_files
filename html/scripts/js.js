@@ -28,11 +28,14 @@ async function sendFilters() {
 	
 			var imgContainer = document.querySelector('.main__images');
 			var text = '';
+
+			console.log(JSON.stringify(response.response[0]));
 	
 			for (let i = 0; i < response.response.length; i++) {
+				// console.log(response.response[0][i][1])
 					text = text + `<div class="main__image">
-		<img src="${response.response[i][0][1]}" alt="${response.response[i][1]}" width="350px" height="350px" id="img_${i}">
-		<a href="#">${response.response[i][1]}</a>
+		<img src="${response.response[i][1][0]}" width="350px" height="350px" id="img_${i}" onmouseover="this.src='${response.response[i][1][1]}';" onmouseout="this.src='${response.response[i][1][0]}';">
+		<a href="#">${response.response[i][0][1]}</a>
 	</div>`;
 					imgContainer.innerHTML = text;
 			}
