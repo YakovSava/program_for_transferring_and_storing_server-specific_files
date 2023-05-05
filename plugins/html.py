@@ -3,7 +3,8 @@ from os.path import isdir, join
 from sass import compile
 from aiofiles import open as aiopen
 
-def _split_a_string(string:str) -> dict:
+
+def _split_a_string(string: str) -> dict:
     raw_path_parameters = string.rsplit('-', 4)
     path_parameters = {
         'initials': raw_path_parameters[0],
@@ -17,6 +18,7 @@ def _split_a_string(string:str) -> dict:
     }
 
     return path_parameters
+
 
 class Pagenator:
 
@@ -53,14 +55,14 @@ class Pagenator:
                 'content_type': 'text/javascript'
             }
 
-    async def get_pic(self, *paths:tuple[str]) -> dict:
+    async def get_pic(self, *paths: tuple[str]) -> dict:
         async with aiopen(join('files', *paths), 'rb') as file:
             return {
                 'body': await file.read(),
                 'content_type': ('image/png' if paths[-1].endswith('.png') else 'image/jpeg')
             }
 
-    async def get_files_and_paths(self, filters: list=None) -> list[list]:
+    async def get_files_and_paths(self, filters: list = None) -> list[dict]:
         final_listdir = []
         for architector_dir in listdir('files'):
             if isdir(join('files', architector_dir)):
@@ -68,40 +70,26 @@ class Pagenator:
                     parameters = _split_a_string(project_dir)
                     # print(parameters, filters)
                     if (
-                        (filters[0][0] < parameters['floors'] < filters[0][1]) and
-                        (filters[1][0] < parameters['size'] < filters[1][1]) and
-                        (filters[2][0] < parameters['area'] < filters[2][1])
+                            (filters[0][0] < parameters['floors'] < filters[0][1]) and
+                            (filters[1][0] < parameters['size'] < filters[1][1]) and
+                            (filters[2][0] < parameters['area'] < filters[2][1])
                     ):
-                        final_listdir.append([
-                            [
-                                [architector_dir, project_dir],
-                                list(
-                                    map(
-                                        lambda x: join('png', architector_dir, project_dir, x),
-                                        self._get_files_in_directory(
-                                            listdir(
-                                                join(
-                                                    'files',
-                                                    architector_dir,
-                                                    project_dir
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            ]
-                        ])
+                        final_listdir.append({
+                            'project': project_dir,
+                            'autor': architector_dir,
+                            'files': self._get_files_in_directory(listdir(join('files', architector_dir, project_dir)))
+                        })
         return final_listdir
 
-    def _get_files_in_directory(self, files:list[str] | tuple[str]) -> list[str]:
-        file_list = []
+    def _get_files_in_directory(self, files: list[str] | tuple[str]) -> dict:
+        file_list = {}
 
         for file in files:
             if file.endswith((".jpg", ".png", ".jpeg")):
                 if file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
-                    file_list.insert(0, file)
+                    file_list['a3d'] = file
                 elif not file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
-                    file_list.append(file)
+                    file_list['two'] = file
             if len(file_list) == 2:
                 break
         return file_list
