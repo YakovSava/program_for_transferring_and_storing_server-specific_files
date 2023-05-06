@@ -1,6 +1,3 @@
-# from hashlib import sha256
-from os import mkdir
-from os.path import isdir
 from urllib.parse import unquote
 from json import loads as jloads
 from toml import loads, dumps
@@ -40,6 +37,18 @@ async def _get_token_file() -> dict:
 
 async def _set_token_file(datas: dict) -> NoReturn:
     async with aiopen('tokens.toml', 'w', encoding='utf-8') as file:
+        await file.write(dumps(datas))
+
+async def _get_cookie_file() -> dict:
+    async with aiopen('cookie_data.toml', 'r', encoding='utf-8') as file:
+        try:
+            return loads(await file.read())
+        except:
+            return loads(_protector(await file.read()))
+
+
+async def _set_cookie_file(datas: dict) -> NoReturn:
+    async with aiopen('cookie_data.toml', 'w', encoding='utf-8') as file:
         await file.write(dumps(datas))
 
 
@@ -171,9 +180,38 @@ async def api_page(request: Request):
                         return json_response(data={'response': 0})
                 else:
                     return json_response(data={'response': 0})
-            else:
-                return json_response(data={'error': 'Invalid method!'})
-        else:
-            return json_response(data={'error': 'Access denied!'})
-    else:
-        return json_response(data={'error': 'Access denied!'})
+            elif data['method'] == 'saveCookie':
+                cookie:dict = data['data']['cookie']
+                # print(cookie)
+                login, password = cookie['autorize']
+                values = cookie['values']
+
+                cookies = await _get_cookie_file()
+                if login not in cookies:
+                    cookies[login] = {
+                        'password': password,
+                        'values': values
+                    }
+                else:
+                    if cookies[login]['values'] != values:
+                        cookies[login]['values'] = values
+                await _set_cookie_file(cookies)
+
+                return json_response(data={'response': 1})
+            elif data['method'] == 'checkCookies':
+                try:
+                    tokens = await _get_token_file()
+                    cookie: dict = data['data']['cookie']
+                    login, password = eval('["'+cookie['autorize'].replace(',', '","')+'"]')
+
+                    if login in tokens:
+                        if tokens[login]['password'] == password:
+                            cookies = await _get_cookie_file()
+                            return json_response(data={'response': 1, 'values': cookies[login]['values']})
+
+                    return json_response(data={'response': 0})
+                except Exception as e:
+                    print(str(e))
+                    return json_response(data={'response': 0})
+            return json_response(data={'error': 'Invalid method!'})
+    return json_response(data={'error': 'Access denied!'})
