@@ -176,10 +176,8 @@ async def api_page(request: Request):
                 if data['data']['autorize']['username'] in tokens:
                     if (data['data']['autorize']['password'] == tokens[data['data']['autorize']['username']]['password']) and (tokens[data['data']['autorize']['username']]['status'] >= 2):
                         return json_response(data={'response': 1})
-                    else:
-                        return json_response(data={'response': 0})
-                else:
                     return json_response(data={'response': 0})
+                return json_response(data={'response': 0})
             elif data['method'] == 'saveCookie':
                 cookie:dict = data['data']['cookie']
                 # print(cookie)
@@ -202,7 +200,7 @@ async def api_page(request: Request):
                 try:
                     tokens = await _get_token_file()
                     cookie: dict = data['data']['cookie']
-                    login, password = eval('["'+cookie['autorize'].replace(',', '","')+'"]')
+                    login, password = cookie['autorize']
 
                     if login in tokens:
                         if tokens[login]['password'] == password:
@@ -211,7 +209,6 @@ async def api_page(request: Request):
 
                     return json_response(data={'response': 0})
                 except Exception as e:
-                    print(str(e))
                     return json_response(data={'response': 0})
             return json_response(data={'error': 'Invalid method!'})
     return json_response(data={'error': 'Access denied!'})

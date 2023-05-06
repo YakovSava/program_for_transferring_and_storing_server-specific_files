@@ -2,26 +2,30 @@ const parser = new DOMParser();
 var autorizeVar = false;
 var autorizeData = [];
 
+// document.cookie = 'cookie={"autorize": ["admin", "admin"], "values": [0, 3456, 0, 5678, 0, 45678]};';
+
 function div(val, by){
     return (val - val % by) / by;
 }
 
-function getCookie() {
-	var obj = {};
-	var cookies = document.cookie.split(/;/);
-	for (var i = 0, len = cookies.length; i < len; i++) {
-		var cookie = cookies[i].split(/=/);
-		obj[cookie[0]] = cookie[1];
-	}
-	return obj;
+function cookieToJSON(cookie) {
+	// console.log(cookie.slice(7));
+	return JSON.parse(cookie.slice(7));
 }
 
-function sendCookie(cookieObj) {
-	var cookieStr = Object.keys(cookieObj).map(function(key) {
-		return key + '=' + cookieObj[key];
-	}).join(';');
-	
-	document.cookie = cookieStr;
+function JSONToCookie(cookieJSON) {
+	return `cookie=${JSON.stringify(cookieJSON)};`
+}
+
+function sendCookie(cookie) {
+	// console.log(JSONToCookie(cookie));
+	document.cookie = JSONToCookie(cookie);
+}
+
+function destroyGrid() {
+	let imagesGridElement = document.querySelector('.main__images');
+
+	imagesGridElement.innerHTML = 'По данным фильтрам ничего не найдено!';
 }
 
 async function cookieAutorize(autorize) {
@@ -54,12 +58,14 @@ async function cookieFilters(filters) {
 		}
 	};
 
+	// console.log(data)
 	await fetch(`api?method=saveCookie&data=${JSON.stringify(data)}`);
 
 	sendCookie(data.cookie);
 }
 
 async function sendFilters() {
+	destroyGrid();
 	if (autorizeVar) {
 		let i = -1;
 		let filterArray = [];
@@ -153,23 +159,26 @@ async function checkCookie() {
 	let data = {
 		user: 'apiKey',
 		password: 'Igor Gygabyte moment',
-		cookie: getCookie()
+		cookie: cookieToJSON(document.cookie)
 	};
 
 	var resp = await fetch(`api?method=checkCookies&data=${JSON.stringify(data)}`);
 	let response = await resp.json();
 
+	// console.log(response.response);
+
 	if (response.response) {
 		let data2 = {
 			user: 'apiKey',
 			password: 'Igor Gygabyte moment',
-			cookie: getCookie()
+			cookie: cookieToJSON(document.cookie)
 		};
 
 		var resp2 = await fetch(`api?method=checkCookies&data=${JSON.stringify(data2)}`);
 		let response2 = await resp2.json();
 
 		autorizeVar = true;
+		autorizeData = data2.cookie.autorize;
 
 		let btn = document.getElementById('btn btn-dark header__btn_1');
 		btn.innerHTML = "Вы вошли!";
@@ -192,7 +201,7 @@ async function checkCookie() {
 					[0, 123456789],
 					[0, 123456789]
 				]
-				};
+			};
 			let resp = await fetch(`api?method=getFilesList&data=${JSON.stringify(data)}`);
 			let response = await resp.json();
 
