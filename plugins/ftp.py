@@ -40,7 +40,7 @@ for username, data in list(data.items()):
         continue
     add_new_worker(username, data['password'], data['status'])
 
-server = FTPServer(('127.0.0.1', 2121), handler)
+server = FTPServer(('192.168.100.9', 2121), handler)
 
 server.max_cons = 256
 server.max_cons_per_ip = 5

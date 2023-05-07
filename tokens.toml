@@ -9,3 +9,7 @@ status = 3
 [admin]
 password = "admin"
 status = 3
+
+[arch]
+password = "arch"
+status = 1

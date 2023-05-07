@@ -5,7 +5,7 @@ var autorizeData = [];
 // document.cookie = 'cookie={"autorize": ["admin", "admin"], "values": [0, 3456, 0, 5678, 0, 45678]};';
 
 function div(val, by){
-    return (val - val % by) / by;
+	return (val - val % by) / by;
 }
 
 function cookieToJSON(cookie) {
@@ -229,6 +229,15 @@ sendButton.addEventListener('click', function() {
 		.then()
 		.catch(console.error)
 });
+
+var inputFields = document.querySelectorAll('input');
+for (let i = 0; i < inputFields.length; i++) {
+	if (!((inputFields[i].id === 'username') && (inputFields[i] === 'password'))) {
+		inputFields[i].addEventListener('change', function() {
+			sendFilters().then()
+		});
+	}
+}
 
 checkCookie()
 	.then()
