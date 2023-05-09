@@ -23,13 +23,13 @@ handler.authorizer = authorizer
 handler.banner = "Добро пожаловать на сервер!"
 
 def add_new_worker(username, password, status):
-    path = f'/files/{username}' # if architector
-    if (status == 2) and (status == 3):  # Manager
-        path = '/files/'
+    path = f'files/{username}' # if architector
     if not isdir(path):
         makedirs(path)
+    if (status == 2) and (status == 3):  # Manager
+        path = 'files/'
     if (status == 3):
-        path = './'
+        path = '.'
     authorizer.add_user(username, password, path, perm='elradfmwMT')
 
 with open('tokens.toml', 'r', encoding='utf-8') as file:
