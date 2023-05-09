@@ -208,7 +208,9 @@ async def api_page(request: Request):
                             return json_response(data={'response': 1, 'values': cookies[login]['values']})
 
                     return json_response(data={'response': 0})
-                except Exception as e:
+                except:
                     return json_response(data={'response': 0})
+            elif data['method'] == 'getPic':
+                return json_response(data={'response': await page.get_two_picture(data['data']['path'])})
             return json_response(data={'error': 'Invalid method!'})
     return json_response(data={'error': 'Access denied!'})

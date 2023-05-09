@@ -97,3 +97,10 @@ class Pagenator:
             if len(file_list) == 2:
                 break
         return file_list
+
+    async def get_two_picture(self, path:str) -> dict:
+        _files_in_directory = self._get_files_in_directory(path)
+        return {
+            'a3d': _files_in_directory[0],
+            'other': _files_in_directory[1]
+        }
