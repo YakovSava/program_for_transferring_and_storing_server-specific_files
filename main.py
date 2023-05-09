@@ -20,6 +20,10 @@ async def main_page(request: Request):
     data = await bind.get_page('admin.html')
     return Response(**data)
 
+@routes.get('/picture/{architector}/{path}')
+async def picture_page(request:Request):
+    data = await bind.get_page('pictures.html')
+    return Response(**data)
 
 if __name__ == '__main__':
     th = Thread(target=starter)

@@ -9,6 +9,7 @@
 - Отдельные папки для каждого архитектора
 - Доступ менеджеру и админу к каждой папке
 - Названия
+
 И т.п.
 
 Данная программа написана на языке программирования Python и запускает сразу сервера на _80_ и _2121_ портах
@@ -28,6 +29,7 @@ This program is a server that stores some data, namely:
 - Separate folders for each architect
 - Manager and admin access to each folder
 - Names
+
 etc.
 
 This program is written in the Python programming language and runs servers on _80_ and _21_ ports at once

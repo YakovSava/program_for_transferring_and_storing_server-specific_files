@@ -216,7 +216,7 @@ async function checkCookie() {
 				// console.log(response.response[0][i][1]);
 					text += `<div class="main__image">
 		<img src="${response.response[i].files.a3d}" width="350px" height="350px" id="img_${i}" onmouseover="this.src='${response.response[i].files.two}';" onmouseout="this.src='${response.response[i].files.a3d}';">
-		<a href="#">${response.response[i].project} от ${response.response[i].autor}</a>
+		<a href="/picture/${response.response[i].autor}/${response.response[i].project}">${response.response[i].project} от ${response.response[i].autor}</a>
 	</div>`;
 					imgContainer.innerHTML = text;
 			}

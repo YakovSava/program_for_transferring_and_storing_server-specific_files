@@ -99,8 +99,10 @@ class Pagenator:
         return file_list
 
     async def get_two_picture(self, path:str) -> dict:
-        _files_in_directory = self._get_files_in_directory(path)
+        _, architector_path, project_path = path.split('/')
+        files = listdir('files/'+path)
+        _files_in_directory = self._get_files_in_directory(files, architector_dir=architector_path, project_dir=project_path)
         return {
-            'a3d': _files_in_directory[0],
-            'other': _files_in_directory[1]
+            'a3d': _files_in_directory['a3d'],
+            'other': _files_in_directory['two']
         }
