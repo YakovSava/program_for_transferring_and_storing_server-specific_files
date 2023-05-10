@@ -1,0 +1,33 @@
+.main {
+
+    // .main__content
+
+    &__content {}
+
+    // .main__images
+
+    &__images {
+        margin: 64px 0;
+        display: block;
+    }
+
+    // .main__image
+
+    &__image {
+        display: grid;
+
+        & img {
+            border-radius: 16px;
+        }
+        &_block {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    &__btn {
+        &_1 {
+            text-align: right;
+        }
+    }
+}
