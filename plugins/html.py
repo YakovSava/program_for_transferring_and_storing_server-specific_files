@@ -10,8 +10,8 @@ def _split_a_string(string: str) -> dict:
         'initials': raw_path_parameters[0],
         'floors': eval(raw_path_parameters[1].replace(',', '.')),
         'size': list(map(
-            int,
-            (raw_path_parameters[2].replace(',', '.').split('x')))),
+            float,
+            (raw_path_parameters[2].replace(',', '.').replace('х', 'x').split('x')))),
         'area': eval(raw_path_parameters[3].replace(',', '.')),
         'surname': raw_path_parameters[4]
     }
@@ -99,7 +99,7 @@ class Pagenator:
 
     async def get_two_picture(self, path:str) -> dict:
         _, architector_path, project_path = path.split('/')
-        files = listdir(join(getcwd(), 'files', path))
+        files = listdir(getcwd()+'/files'+path)
         _files_in_directory = self._get_files_in_directory(files, architector_dir=architector_path, project_dir=project_path)
         return {
             'a3d': _files_in_directory['a3d'],
