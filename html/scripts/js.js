@@ -211,15 +211,21 @@ async function checkCookie() {
 			var text = '';
 
 			// console.log(response.response);
+			text += '<div id="main">'
 	
 			for (let i = 0; i < response.response.length; i++) {
 				// console.log(response.response[0][i][1]);
-					text += `<div class="main__image">
+				if (div(i, 3) === 1) text += '<div id="main__2">'
+				text += `<div class="main__image">
 		<img src="${response.response[i].files.a3d}" width="350px" height="350px" id="img_${i}" onmouseover="this.src='${response.response[i].files.two}';" onmouseout="this.src='${response.response[i].files.a3d}';">
 		<a href="/picture/${response.response[i].autor}/${response.response[i].project}">${response.response[i].project} от ${response.response[i].autor}</a>
 	</div>`;
-					imgContainer.innerHTML = text;
+				imgContainer.innerHTML = text;
+
+				if (div(i, 3) === 1) text += '</div>'
 			}
+
+			text += '</div>'
 	}
 }
 

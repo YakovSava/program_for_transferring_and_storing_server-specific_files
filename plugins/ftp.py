@@ -8,9 +8,7 @@ from pyftpdlib.servers import FTPServer
 
 class FTPAccounant(FTPHandler):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.files_size = 0
+    files_size = 0
 
     def on_file_sent(self, file: str) -> None:
         self.files_size += getsize(file)
