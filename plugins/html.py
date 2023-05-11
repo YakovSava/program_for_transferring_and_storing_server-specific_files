@@ -67,10 +67,11 @@ class Pagenator:
             if isdir(join('files', architector_dir)):
                 for project_dir in listdir(join('files', architector_dir)):
                     parameters = _split_a_string(project_dir)
-                    # print(parameters, filters)
+                    # print(f"{filters[1][0]} <= {parameters['size']} <= {filters[1][1]}", [filters[1][0], filters[1][0]] <= parameters['size'] <= [filters[1][1], filters[1][1]])
                     if (
                             (filters[0][0] <= parameters['floors'] <= filters[0][1]) and
-                            ([filters[1][0], filters[1][0]] <= parameters['size'] <= [filters[1][1], filters[1][1]]) and
+                            (filters[1][0] <= parameters['size'][0] <= filters[1][1]) and
+                            (filters[1][0] <= parameters['size'][1] <= filters[1][1]) and
                             (filters[2][0] <= parameters['area'] <= filters[2][1])
                     ):
                         final_listdir.append({

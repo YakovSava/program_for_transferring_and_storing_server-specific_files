@@ -76,7 +76,7 @@ async function sendFilters() {
 			filterArray.push(filter);
 		}
 		while (filterArray.length) {
-			 result.push(filterArray.splice(0, 2));
+			result.push(filterArray.splice(0, 2));
 		}
 		if (result.includes(0)) {
 			alert("Заполните все поля используя числа");
@@ -85,7 +85,7 @@ async function sendFilters() {
 				user: "apiKey",
 				password: "Igor Gygabyte moment",
 				filters: result
-				};
+			};
 			let resp = await fetch(`api?method=getFilesList&data=${JSON.stringify(data)}`);
 			let response = await resp.json();
 
@@ -110,6 +110,9 @@ async function sendFilters() {
 					text += '</div>'
 				}
 			}
+			let title = document.getElementById('table__title');
+
+			title.innerHTML = `Поиск по фильтру (отображено ${response.response.length} результатов)`;
 		};
 	} else {
 		alert('Вы не авторизованы!');
@@ -233,6 +236,9 @@ async function checkCookie() {
 				text += '</div>'
 			}
 		}
+		let title = document.getElementById('table__title');
+
+		title.innerHTML = `Поиск по фильтру (отображено ${response.response.length} результатов)`;
 	}
 }
 
@@ -245,7 +251,7 @@ sendButton.addEventListener('click', function() {
 
 var inputFields = document.querySelectorAll('input');
 for (let i = 0; i < inputFields.length; i++) {
-	if (!((inputFields[i].id === 'username') && (inputFields[i] === 'password'))) {
+	if ((inputFields[i].id !== 'username') && (inputFields[i] !== 'password')) {
 		inputFields[i].addEventListener('change', function() {
 			sendFilters().then()
 		});
