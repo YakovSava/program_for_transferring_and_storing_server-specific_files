@@ -174,8 +174,8 @@ async def api_page(request: Request):
             elif data['method'] == 'autorize':
                 tokens = await _get_token_file()
                 if data['data']['autorize']['username'] in tokens:
-                    if (data['data']['autorize']['password'] == tokens[data['data']['autorize']['username']]['password']) and (tokens[data['data']['autorize']['username']]['status'] >= 2):
-                        return json_response(data={'response': 1})
+                    if data['data']['autorize']['password'] == tokens[data['data']['autorize']['username']]['password']:
+                        return json_response(data={'response': 1, 'admin': tokens[data['data']['autorize']['username']]['status'] == 3})
                     return json_response(data={'response': 0})
                 return json_response(data={'response': 0})
             elif data['method'] == 'saveCookie':
@@ -205,8 +205,7 @@ async def api_page(request: Request):
                     if login in tokens:
                         if tokens[login]['password'] == password:
                             cookies = await _get_cookie_file()
-                            return json_response(data={'response': 1, 'values': cookies[login]['values']})
-
+                            return json_response(data={'response': 1, 'values': cookies[login]['values'], 'admin': tokens[login]['status'] == 3})
                     return json_response(data={'response': 0})
                 except:
                     return json_response(data={'response': 0})

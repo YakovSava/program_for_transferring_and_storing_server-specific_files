@@ -145,12 +145,15 @@ async function autorize() {
 		let btn = document.getElementById('btn btn-dark header__btn_1');
 		btn.innerHTML = "Вы вошли!";
 
-		var adminDiv = document.getElementById('to-admin');
-		adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`
 
 		await cookieAutorize([username, password]);
 	} else {
 		alert('Неверный логин или пароль!');
+	}
+
+	if (response.admin) {
+		var adminDiv = document.getElementById('to-admin');
+		adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`
 	}
 }
 
@@ -172,9 +175,7 @@ async function checkCookie() {
 	};
 
 	var resp = await fetch(`api?method=checkCookies&data=${JSON.stringify(data)}`);
-	let response = await resp.json();
-
-	// console.log(response.response);
+	var response = await resp.json();
 
 	if (response.response) {
 		let data2 = {
@@ -192,8 +193,10 @@ async function checkCookie() {
 		let btn = document.getElementById('btn btn-dark header__btn_1');
 		btn.innerHTML = "Вы вошли!";
 
-		var adminDiv = document.getElementById('to-admin');
-		adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
+		if (response2.admin) {
+			var adminDiv = document.getElementById('to-admin');
+			adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
+		}
 
 		var inputs = document.querySelectorAll('input');
 
@@ -214,12 +217,8 @@ async function checkCookie() {
 		let resp = await fetch(`api?method=getFilesList&data=${JSON.stringify(data)}`);
 		let response = await resp.json();
 
-		// await cookieFilters(data.filters);
-
 		var imgContainer = document.querySelector('.main__images');
 		var text = '';
-
-		// console.log(response.response);
 
 		for (let i = 0; i < response.response.length; i++) {
 			console.log(i, i % 3)

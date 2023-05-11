@@ -1,3 +1,7 @@
 [admin]
 password = "admin"
 values = [ [ 1, 1,], [ 1, 1,], [ 1, 1,],]
+
+[manager]
+password = "manager"
+values = [ [ 1, 1,], [ 1, 1,], [ 1, 1,],]
