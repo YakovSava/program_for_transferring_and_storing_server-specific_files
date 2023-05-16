@@ -74,14 +74,16 @@ class Pagenator:
                             (filters[1][0] <= parameters['size'][1] <= filters[1][1]) and
                             (filters[2][0] <= parameters['area'] <= filters[2][1])
                     ):
+                        _tmp = self._get_files_in_directory(
+                            listdir(join('files', architector_dir, project_dir)),
+                            architector_dir=architector_dir,
+                            project_dir=project_dir
+                        )
+                        _tmp['two'] = _tmp['two'][0]
                         final_listdir.append({
                             'project': project_dir,
                             'autor': architector_dir,
-                            'files': self._get_files_in_directory(
-                                listdir(join('files', architector_dir, project_dir)),
-                                architector_dir=architector_dir,
-                                project_dir=project_dir
-                            )
+                            'files': _tmp
                         })
         return final_listdir
 
@@ -94,8 +96,6 @@ class Pagenator:
                     file_list['a3d'] = join('png', architector_dir, project_dir, file).replace('\\', '/')
                 elif not file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
                     file_list['two'] = join('png', architector_dir, project_dir, file).replace('\\', '/')
-            if len(file_list) == 2:
-                break
         return file_list
 
     async def get_two_picture(self, path:str) -> dict:

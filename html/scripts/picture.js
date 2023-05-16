@@ -14,11 +14,15 @@ async function setPhoto() {
 	var pictures = await getPhoto();
 
 	console.log(pictures);
-	element.innerHTML = `<a href="/${pictures.response.a3d}">
+	text = `<a href="/${pictures.response.a3d}">
 		<img src="/${pictures.response.a3d}" width="1500px" height="1500">
-	</a><a href="/${pictures.response.other}">
-		<img src="/${pictures.response.other}" width="1500" height="1500">
 	</a>`;
+	for (let i = 0; i < pictures.other.length; i++) {
+		text += `<a href="/${pictures.response.other}">
+		<img src="/${pictures.response.other}" width="1500" height="1500">
+	</a>`
+	}
+	element.innerHTML = text
 }
 
 setPhoto().then();
