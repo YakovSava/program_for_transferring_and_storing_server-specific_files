@@ -18,14 +18,34 @@ function JSONToCookie(cookieJSON) {
 }
 
 function sendCookie(cookie) {
-	// console.log(JSONToCookie(cookie));
 	document.cookie = JSONToCookie(cookie);
+}
+
+function resizeImage(width, height, n) {
+  let ratio = Math.min(n / width, n / height);
+  return [width * ratio, height * ratio];
 }
 
 function destroyGrid() {
 	let imagesGridElement = document.querySelector('.main__images');
 
 	imagesGridElement.innerHTML = 'По данным фильтрам ничего не найдено!';
+}
+
+function popUp() {
+	document.querySelector(".background").classList.toggle("blur");
+	document.querySelector(".pop-up-autorize").classList.toggle("active");
+}
+
+function popUpClose() {
+	document.querySelector(".background").classList.remove("blur");
+	document.querySelector(".pop-up-autorize").classList.remove("active");
+}
+
+function checkVisitor() {
+	console.log(document.location.search.split('/')[0].slice(6).replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"'));
+	let urlData = JSON.parse(document.location.search.split('/')[0].slice(6).replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"'));
+	return true;
 }
 
 async function cookieAutorize(autorize) {
@@ -157,16 +177,6 @@ async function autorize() {
 	}
 }
 
-function popUp() {
-	document.querySelector(".background").classList.toggle("blur");
-	document.querySelector(".pop-up-autorize").classList.toggle("active");
-}
-
-function popUpClose() {
-	document.querySelector(".background").classList.remove("blur");
-	document.querySelector(".pop-up-autorize").classList.remove("active");
-}
-
 async function checkCookie() {
 	let data = {
 		user: 'apiKey',
@@ -221,12 +231,11 @@ async function checkCookie() {
 		var text = '';
 
 		for (let i = 0; i < response.response.length; i++) {
-			console.log(i, i % 3)
 			if (i % 3 === 0) {
 				text += '<div class="main__image_block">'
 			}
 			text += `<div class="main__image">
-	<img src="${response.response[i].files.a3d}" width="350px" height="350px" id="img_${i}" onmouseover="this.src='${response.response[i].files.two}';" onmouseout="this.src='${response.response[i].files.a3d}';">
+	<img src="${response.response[i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[i].files.two}';" onmouseout="this.src='${response.response[i].files.a3d}';">
 	<a href="/picture/${response.response[i].autor}/${response.response[i].project}">${response.response[i].project} от ${response.response[i].autor}</a>
 </div>`;
 			imgContainer.innerHTML = text;
@@ -238,6 +247,31 @@ async function checkCookie() {
 		let title = document.getElementById('table__title');
 
 		title.innerHTML = `Поиск по фильтру (отображено ${response.response.length} результатов)`;
+
+		var imgs = document.querySelectorAll('img');
+		for (let i = 0; i < imgs.length; i++) {
+			imgs[i].onload = function(){
+
+				if ((this.old_width != undefined) && (this.old_height != undefined)) {
+					this.width = this.old_width;
+					this.height = this.old_height;
+				}
+
+				var width = this.width;
+				var height = this.height;
+
+				this.width = div(width, 3);
+				this.height = div(height, 3);
+
+				let _temp = presetImg(this.width, this.height, 350);
+
+				this.width = _temp[0];
+				this.height = _temp[1];
+
+				this.old_width = _temp[0];
+				this.old_height = _temp[1];
+			}
+		}
 	}
 }
 
@@ -250,12 +284,16 @@ sendButton.addEventListener('click', function() {
 
 var inputFields = document.querySelectorAll('input');
 for (let i = 0; i < inputFields.length; i++) {
-	if ((inputFields[i].id !== 'username') && (inputFields[i] !== 'password')) {
+	if ((inputFields[i].id !== 'username') || (inputFields[i] !== 'password')) {
 		inputFields[i].addEventListener('change', function() {
 			sendFilters().then()
 		});
 	}
 }
 
-checkCookie()
-	.then();
+if (true) {
+	checkCookie()
+		.then();
+}
+
+checkVisitor()

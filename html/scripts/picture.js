@@ -13,13 +13,13 @@ async function setPhoto() {
 	var element = document.getElementById('two-pic');
 	var pictures = await getPhoto();
 
-	console.log(pictures);
+	console.log(pictures.response.other);
 	text = `<a href="/${pictures.response.a3d}">
-		<img src="/${pictures.response.a3d}" width="1500px" height="1500">
+		<img src="/${pictures.response.a3d}">
 	</a>`;
-	for (let i = 0; i < pictures.other.length; i++) {
-		text += `<a href="/${pictures.response.other}">
-		<img src="/${pictures.response.other}" width="1500" height="1500">
+	for (let i = 0; i < pictures.response.other.length; i++) {
+		text += `<a href="/${pictures.response.other[i]}">
+		<img src="/${pictures.response.other[i]}">
 	</a>`
 	}
 	element.innerHTML = text

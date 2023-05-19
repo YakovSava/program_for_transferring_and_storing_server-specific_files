@@ -66,6 +66,7 @@ class Pagenator:
         for architector_dir in listdir('files'):
             if isdir(join('files', architector_dir)):
                 for project_dir in listdir(join('files', architector_dir)):
+                    if not isdir(join('files', architector_dir, project_dir)): continue
                     parameters = _split_a_string(project_dir)
                     # print(f"{filters[1][0]} <= {parameters['size']} <= {filters[1][1]}", [filters[1][0], filters[1][0]] <= parameters['size'] <= [filters[1][1], filters[1][1]])
                     if (
@@ -87,21 +88,23 @@ class Pagenator:
                         })
         return final_listdir
 
-    def _get_files_in_directory(self, files: list[str] | tuple[str], architector_dir:str=None, project_dir:str=None) -> dict:
-        file_list = {}
+    def _get_files_in_directory(self, files: list[str] | tuple[str], architector_dir: str = None,
+                                project_dir: str = None) -> dict:
+        file_list = {'two': []}
 
         for file in files:
             if file.endswith((".jpg", ".png", ".jpeg")):
                 if file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
                     file_list['a3d'] = join('png', architector_dir, project_dir, file).replace('\\', '/')
                 elif not file.startswith("3") and file.endswith((".jpg", ".png", ".jpeg")):
-                    file_list['two'] = join('png', architector_dir, project_dir, file).replace('\\', '/')
+                    file_list['two'].append(join('png', architector_dir, project_dir, file).replace('\\', '/'))
         return file_list
 
-    async def get_two_picture(self, path:str) -> dict:
+    async def get_two_picture(self, path: str) -> dict:
         _, architector_path, project_path = path.split('/')
-        files = listdir(getcwd()+'/files'+path)
-        _files_in_directory = self._get_files_in_directory(files, architector_dir=architector_path, project_dir=project_path)
+        files = listdir(getcwd() + '/files' + path)
+        _files_in_directory = self._get_files_in_directory(files, architector_dir=architector_path,
+                                                           project_dir=project_path)
         return {
             'a3d': _files_in_directory['a3d'],
             'other': _files_in_directory['two']
