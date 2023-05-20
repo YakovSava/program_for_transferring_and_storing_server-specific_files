@@ -21,19 +21,6 @@ function sendCookie(cookie) {
 	document.cookie = JSONToCookie(cookie);
 }
 
-function resizeImage(width, height, n) {
-	console.log(width, height);
-	if (height <= n) {
-		return [width, height];
-	}
-	while (height > n) {
-		width -= 1;
-		height -= 1;
-	}
-	console.log('SET!', width, height);
-	return [width, height];
-}
-
 function destroyGrid() {
 	let imagesGridElement = document.querySelector('.main__images');
 
@@ -51,9 +38,12 @@ function popUpClose() {
 }
 
 function checkVisitor() {
-	console.log(document.location.search.split('/')[0].slice(6).replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"'));
-	let urlData = JSON.parse(document.location.search.split('/')[0].slice(6).replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"'));
-	return true;
+	try {
+		let urlData = JSON.parse(decodeURIComponent(document.location.search.slice(1)));
+		return urlData.visitor;
+	} catch {
+		return false;
+	}
 }
 
 function ScaleImage(Img){
@@ -107,6 +97,32 @@ async function cookieFilters(filters) {
 	sendCookie(data.cookie);
 }
 
+async function copyToClipboard(textToCopy) {
+	await navigator.clipboard.writeText(textToCopy);
+	alert('Текст скопирован в буфер обмена!');
+}
+
+function shareLink() {
+	let i = -1;
+	let filterArray = [];
+	let result = [];
+	while (i < 5) {
+		i++
+		let filter = Number(document.querySelectorAll("input")[i].value);
+		filterArray.push(filter);
+	}
+	while (filterArray.length) {
+		result.push(filterArray.splice(0, 2));
+	}
+
+	var data = {
+		visitor: true,
+		filters: result
+	}
+
+	copyToClipboard(`${document.location.protocol}//${document.location.host}/?${JSON.stringify(data)}`);
+}
+
 async function sendFilters() {
 	destroyGrid();
 	if (autorizeVar) {
@@ -157,6 +173,13 @@ async function sendFilters() {
 
 			title.innerHTML = `Поиск по фильтру (отображено ${response.response.length} результатов)`;
 		};
+
+		var imgs = document.querySelectorAll('img');
+		for (let i = 0; i < imgs.length; i++) {
+			imgs[i].onload = function(){
+				ScaleImage(this)
+			}
+		}
 	} else {
 		alert('Вы не авторизованы!');
 	}
@@ -194,10 +217,11 @@ async function autorize() {
 		alert('Неверный логин или пароль!');
 	}
 
-	if (response.admin) {
-		var adminDiv = document.getElementById('to-admin');
-		adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`
+	var adminDiv = document.getElementById('to-admin');
+	if (response2.admin) {
+		adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
 	}
+	adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая ссылка</button>`
 }
 
 async function checkCookie() {
@@ -226,10 +250,11 @@ async function checkCookie() {
 		let btn = document.getElementById('btn btn-dark header__btn_1');
 		btn.innerHTML = "Вы вошли!";
 
+		var adminDiv = document.getElementById('to-admin');
 		if (response2.admin) {
-			var adminDiv = document.getElementById('to-admin');
 			adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
 		}
+		adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая ссылка</button>`
 
 		var inputs = document.querySelectorAll('input');
 
@@ -275,24 +300,47 @@ async function checkCookie() {
 		for (let i = 0; i < imgs.length; i++) {
 			imgs[i].onload = function(){
 				ScaleImage(this)
-				// if ((this.old_width != undefined) && (this.old_height != undefined)) {
-				// 	this.width = this.old_width;
-				// 	this.height = this.old_height;
-				// }
+			}
+		}
+	}
+}
 
-				// var width = this.width;
-				// var height = this.height;
+async function helloVisitor() {
+	let visitorData = JSON.parse(decodeURIComponent(document.location.search.slice(1)));
 
-				// // this.width = div(width, 3);
-				// // this.height = div(height, 3);
+	let filterPanel = document.getElementById('table__form');
+	filterPanel.parentNode.removeChild(filterPanel);
 
-				// let _temp = resizeImage(this.width, this.height, 100);
+	let data = {
+			user: "apiKey",
+			password: "Igor Gygabyte moment",
+			filters: visitorData.filters
+		};
 
-				// this.width = _temp[0];
-				// this.height = _temp[1];
+	let resp = await fetch(`api?method=getFilesList&data=${JSON.stringify(data)}`);
+	let response = await resp.json();
 
-				// this.old_width = _temp[0];
-				// this.old_height = _temp[1];
+	var imgContainer = document.querySelector('.main__images');
+	var text = '';
+
+	for (let i = 0; i < response.response.length; i++) {
+		if (i % 3 === 0) {
+			text += '<div class="main__image_block">'
+		}
+		text += `<div class="main__image">
+<img src="${response.response[i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[i].files.two}';" onmouseout="this.src='${response.response[i].files.a3d}';">
+<a href="/picture/${response.response[i].autor}/${response.response[i].project}">${response.response[i].project} от ${response.response[i].autor}</a>
+</div>`;
+		imgContainer.innerHTML = text;
+
+		if (i % 3 === 2) {
+			text += '</div>'
+		}
+
+		var imgs = document.querySelectorAll('img');
+		for (let i = 0; i < imgs.length; i++) {
+			imgs[i].onload = function(){
+				ScaleImage(this)
 			}
 		}
 	}
@@ -301,22 +349,22 @@ async function checkCookie() {
 let sendButton = document.getElementById('btn-autorize');
 sendButton.addEventListener('click', function() {
 	autorize()
-		.then()
-		.catch(console.error)
+		.then();
 });
 
 var inputFields = document.querySelectorAll('input');
 for (let i = 0; i < inputFields.length; i++) {
-	if ((inputFields[i].id !== 'username') || (inputFields[i].id !== 'password')) {
+	if ((inputFields[i].id !== 'username') && (inputFields[i].id !== 'password')) {
 		inputFields[i].addEventListener('change', function() {
-			sendFilters().then()
+			sendFilters().then();
 		});
 	}
 }
 
-if (true) {
+if (checkVisitor()) {
+	helloVisitor()
+		.then();
+} else {
 	checkCookie()
 		.then();
 }
-
-checkVisitor()
