@@ -22,8 +22,16 @@ function sendCookie(cookie) {
 }
 
 function resizeImage(width, height, n) {
-  let ratio = Math.min(n / width, n / height);
-  return [width * ratio, height * ratio];
+	console.log(width, height);
+	if (height <= n) {
+		return [width, height];
+	}
+	while (height > n) {
+		width -= 1;
+		height -= 1;
+	}
+	console.log('SET!', width, height);
+	return [width, height];
 }
 
 function destroyGrid() {
@@ -46,6 +54,21 @@ function checkVisitor() {
 	console.log(document.location.search.split('/')[0].slice(6).replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"'));
 	let urlData = JSON.parse(document.location.search.split('/')[0].slice(6).replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"').replace('%22', '"'));
 	return true;
+}
+
+function ScaleImage(Img){
+
+	var Size=100000, nW=Img.naturalWidth, nH=Img.naturalHeight, W=nW, H=nH, Scale=1;
+
+	if((W*H)>Size){
+
+	while((W*H)>Size){ Scale-=0.01; W=nW*Scale; H=nH*Scale; }
+	} else {
+		while ((W*H)<Size){ Scale+=0.01; W=nW*Scale; H=nH*Scale; }
+	} 
+
+	Img.width = Math.round(W); Img.height=Math.round(H);
+
 }
 
 async function cookieAutorize(autorize) {
@@ -251,25 +274,25 @@ async function checkCookie() {
 		var imgs = document.querySelectorAll('img');
 		for (let i = 0; i < imgs.length; i++) {
 			imgs[i].onload = function(){
+				ScaleImage(this)
+				// if ((this.old_width != undefined) && (this.old_height != undefined)) {
+				// 	this.width = this.old_width;
+				// 	this.height = this.old_height;
+				// }
 
-				if ((this.old_width != undefined) && (this.old_height != undefined)) {
-					this.width = this.old_width;
-					this.height = this.old_height;
-				}
+				// var width = this.width;
+				// var height = this.height;
 
-				var width = this.width;
-				var height = this.height;
+				// // this.width = div(width, 3);
+				// // this.height = div(height, 3);
 
-				this.width = div(width, 3);
-				this.height = div(height, 3);
+				// let _temp = resizeImage(this.width, this.height, 100);
 
-				let _temp = presetImg(this.width, this.height, 350);
+				// this.width = _temp[0];
+				// this.height = _temp[1];
 
-				this.width = _temp[0];
-				this.height = _temp[1];
-
-				this.old_width = _temp[0];
-				this.old_height = _temp[1];
+				// this.old_width = _temp[0];
+				// this.old_height = _temp[1];
 			}
 		}
 	}
@@ -284,7 +307,7 @@ sendButton.addEventListener('click', function() {
 
 var inputFields = document.querySelectorAll('input');
 for (let i = 0; i < inputFields.length; i++) {
-	if ((inputFields[i].id !== 'username') || (inputFields[i] !== 'password')) {
+	if ((inputFields[i].id !== 'username') || (inputFields[i].id !== 'password')) {
 		inputFields[i].addEventListener('change', function() {
 			sendFilters().then()
 		});

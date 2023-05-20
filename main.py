@@ -33,4 +33,4 @@ if __name__ == '__main__':
     app.add_routes(session_routes)
     app.add_routes(static_routes)
 
-    run_app(app, host='192.168.100.9', port=80)
+    run_app(app, host='localhost', port=80)
