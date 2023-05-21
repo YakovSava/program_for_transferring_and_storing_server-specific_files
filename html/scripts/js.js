@@ -2,8 +2,6 @@ const parser = new DOMParser();
 var autorizeVar = false;
 var autorizeData = [];
 
-// document.cookie = 'cookie={"autorize": ["admin", "admin"], "values": [0, 3456, 0, 5678, 0, 45678]};';
-
 function div(val, by){
 	return (val - val % by) / by;
 }
@@ -97,9 +95,13 @@ async function cookieFilters(filters) {
 	sendCookie(data.cookie);
 }
 
-async function copyToClipboard(textToCopy) {
-	await navigator.clipboard.writeText(textToCopy);
-	alert('Текст скопирован в буфер обмена!');
+function copyToClipboard(textToCopy) {
+	if (navigator.clipboard) {
+		navigator.clipboard.writeText(textToCopy)
+		alert('Текст скоыпирован в буфер обмена!');
+	} else {
+		alert('Ваш браузер не поддерживает копирование в буфер обмена!');
+	}
 }
 
 function shareLink() {
@@ -120,7 +122,7 @@ function shareLink() {
 		filters: result
 	}
 
-	copyToClipboard(`${document.location.protocol}//${document.location.host}/?${JSON.stringify(data)}`);
+	window.location.href = `${document.location.protocol}//${document.location.host}/?${JSON.stringify(data)}`;
 }
 
 async function sendFilters() {
@@ -221,7 +223,7 @@ async function autorize() {
 	if (response2.admin) {
 		adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
 	}
-	adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая ссылка</button>`
+	adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая страница</button>`
 }
 
 async function checkCookie() {
@@ -254,7 +256,7 @@ async function checkCookie() {
 		if (response2.admin) {
 			adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
 		}
-		adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая ссылка</button>`
+		adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая страница</button>`
 
 		var inputs = document.querySelectorAll('input');
 
