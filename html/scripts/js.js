@@ -1,4 +1,4 @@
-const parser = new DOMParser();
+// const parser = new DOMParser();
 var autorizeVar = false;
 var autorizeData = [];
 
@@ -7,7 +7,6 @@ function div(val, by){
 }
 
 function cookieToJSON(cookie) {
-	// console.log(cookie.slice(7));
 	return JSON.parse(cookie.slice(7));
 }
 
@@ -46,13 +45,13 @@ function checkVisitor() {
 
 function ScaleImage(Img){
 
-	var Size=100000, nW=Img.naturalWidth, nH=Img.naturalHeight, W=nW, H=nH, Scale=1;
+	var Size = 100000, nW = Img.naturalWidth, nH = Img.naturalHeight, W = nW, H = nH, Scale = 1;
 
-	if((W*H)>Size){
+	if((W * H) > Size){
 
-	while((W*H)>Size){ Scale-=0.01; W=nW*Scale; H=nH*Scale; }
+	while((W * H) > Size){ Scale -= 0.01; W = nW * Scale; H = nH * Scale; }
 	} else {
-		while ((W*H)<Size){ Scale+=0.01; W=nW*Scale; H=nH*Scale; }
+		while ((W * H) < Size){ Scale += 0.01; W = nW * Scale; H = nH * Scale; }
 	} 
 
 	Img.width = Math.round(W); Img.height=Math.round(H);
@@ -67,9 +66,9 @@ async function cookieAutorize(autorize) {
 		cookie: {
 			autorize: autorize,
 			values: [
-				[1, 1],
-				[1, 1],
-				[1, 1]
+				[1, 1000],
+				[1, 1000],
+				[1, 1000]
 			]
 		}
 	};
@@ -95,14 +94,14 @@ async function cookieFilters(filters) {
 	sendCookie(data.cookie);
 }
 
-function copyToClipboard(textToCopy) {
-	if (navigator.clipboard) {
-		navigator.clipboard.writeText(textToCopy)
-		alert('Текст скоыпирован в буфер обмена!');
-	} else {
-		alert('Ваш браузер не поддерживает копирование в буфер обмена!');
-	}
-}
+// function copyToClipboard(textToCopy) {
+// 	if (navigator.clipboard) {
+// 		navigator.clipboard.writeText(textToCopy)
+// 		alert('Текст скоыпирован в буфер обмена!');
+// 	} else {
+// 		alert('Ваш браузер не поддерживает копирование в буфер обмена!');
+// 	}
+// }
 
 function shareLink() {
 	let i = -1;
@@ -269,9 +268,9 @@ async function checkCookie() {
 			user: "apiKey",
 			password: "Igor Gygabyte moment",
 			filters: [
-				[0, 123456789],
-				[0, 123456789],
-				[0, 123456789]
+				[0, 1000],
+				[0, 1000],
+				[0, 1000]
 			]
 		};
 		let resp = await fetch(`api?method=getFilesList&data=${JSON.stringify(data)}`);
