@@ -1,6 +1,6 @@
 [admin]
 password = "admin"
-values = [ [ 1, 1000,], [ 1, 1000,], [ 1, 1000,],]
+values = [ [ 0, 2,], [ 1, 1000,], [ 1, 1000,],]
 
 [manager]
 password = "manager"

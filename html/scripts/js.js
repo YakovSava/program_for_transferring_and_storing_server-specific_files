@@ -66,7 +66,7 @@ async function cookieAutorize(autorize) {
 		cookie: {
 			autorize: autorize,
 			values: [
-				[1, 1000],
+				[0, 2],
 				[1, 1000],
 				[1, 1000]
 			]
