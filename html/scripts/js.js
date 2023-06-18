@@ -156,14 +156,14 @@ async function sendFilters() {
 
 			// console.log(response.response);
 	
-			for (let i = 0; i < response.response.length; i++) {
+			for (let i = 0; i < response.response[0].length; i++) {
 				if (i % 3 === 0) {
 					text += '<div class="main__image_block">'
 				}
 				text += `<div class="main__image">
-		<img src="${response.response[i].files.a3d}" width="350px" height="350px" id="img_${i}" onmouseover="this.src='${response.response[i].files.two}';" onmouseout="this.src='${response.response[i].files.a3d}';">
-		<a href="/picture/${response.response[i].autor}/${response.response[i].project}">${response.response[i].project} от ${response.response[i].autor}</a>
-	</div>`;
+		<img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
+		<a href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
+		</div>`;
 				imgContainer.innerHTML = text;
 
 				if (i % 3 === 2) {
@@ -172,8 +172,16 @@ async function sendFilters() {
 			}
 			let title = document.getElementById('table__title');
 
-			title.innerHTML = `Поиск по фильтру (отображено ${response.response.length} результатов)`;
+			title.innerHTML = `Поиск по фильтру (отображено ${response.response[0].length} результатов)`;
 		};
+
+		let notVisibleBlock = document.getElementById("not_visible");
+		let nvbText = `<hr>Не отображено: ${response.response[1].length}<br>Список не отображённых:<br>`;
+		for (let i = 0; i < response.response[1].length; i++) {
+			nvbText += `${response.response[1][i]}<br>`
+		}
+
+		notVisibleBlock.innerHTML = nvbText;
 
 		var imgs = document.querySelectorAll('img');
 		for (let i = 0; i < imgs.length; i++) {
@@ -279,14 +287,14 @@ async function checkCookie() {
 		var imgContainer = document.querySelector('.main__images');
 		var text = '';
 
-		for (let i = 0; i < response.response.length; i++) {
+		for (let i = 0; i < response.response[0].length; i++) {
 			if (i % 3 === 0) {
 				text += '<div class="main__image_block">'
 			}
 			text += `<div class="main__image">
-	<img src="${response.response[i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[i].files.two}';" onmouseout="this.src='${response.response[i].files.a3d}';">
-	<a href="/picture/${response.response[i].autor}/${response.response[i].project}">${response.response[i].project} от ${response.response[i].autor}</a>
-</div>`;
+	<img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
+	<a href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
+	</div>`;
 			imgContainer.innerHTML = text;
 
 			if (i % 3 === 2) {
@@ -295,7 +303,15 @@ async function checkCookie() {
 		}
 		let title = document.getElementById('table__title');
 
-		title.innerHTML = `Поиск по фильтру (отображено ${response.response.length} результатов)`;
+		title.innerHTML = `Поиск по фильтру (отображено ${response.response[0].length} результатов)`;
+
+		let notVisibleBlock = document.getElementById("not_visible");
+		let nvbText = `<hr>Не отображено: ${response.response[1].length}<br>Список не отображённых:<br>`;
+		for (let i = 0; i < response.response[1].length; i++) {
+			nvbText += `${response.response[1][i]}<br>`
+		}
+
+		notVisibleBlock.innerHTML = nvbText;
 
 		var imgs = document.querySelectorAll('img');
 		for (let i = 0; i < imgs.length; i++) {
@@ -324,13 +340,13 @@ async function helloVisitor() {
 	var imgContainer = document.querySelector('.main__images');
 	var text = '';
 
-	for (let i = 0; i < response.response.length; i++) {
+	for (let i = 0; i < response.response[0].length; i++) {
 		if (i % 3 === 0) {
 			text += '<div class="main__image_block">'
 		}
 		text += `<div class="main__image">
-<img src="${response.response[i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[i].files.two}';" onmouseout="this.src='${response.response[i].files.a3d}';">
-<a href="/picture/${response.response[i].autor}/${response.response[i].project}">${response.response[i].project} от ${response.response[i].autor}</a>
+<img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
+<a href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
 </div>`;
 		imgContainer.innerHTML = text;
 

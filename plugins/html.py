@@ -1,5 +1,7 @@
 from os import mkdir, listdir, getcwd
 from os.path import isdir, join
+from typing import Tuple, List, Dict
+
 from sass import compile
 from aiofiles import open as aiopen
 
@@ -61,12 +63,18 @@ class Pagenator:
                 'content_type': ('image/png' if paths[-1].endswith('.png') else 'image/jpeg')
             }
 
-    async def get_files_and_paths(self, filters: list = None) -> list[dict]:
+    async def get_files_and_paths(self, filters: list = None) -> list[list[dict[str, str | dict]], list[str]]:
         final_listdir = []
+        incorrect_path = []
         for architector_dir in listdir('files'):
             if isdir(join('files', architector_dir)):
                 for project_dir in listdir(join('files', architector_dir)):
-                    if not isdir(join('files', architector_dir, project_dir)): continue
+                    if not isdir(join('files', architector_dir, project_dir)):
+                        incorrect_path.append(join('files', architector_dir, project_dir))
+                        continue
+                    if len(listdir(join('files', architector_dir, project_dir))) == 0:
+                        incorrect_path.append(join('files', architector_dir, project_dir))
+                        continue
                     parameters = _split_a_string(project_dir)
                     # print(f"{filters[1][0]} <= {parameters['size']} <= {filters[1][1]}", [filters[1][0], filters[1][0]] <= parameters['size'] <= [filters[1][1], filters[1][1]])
                     if (
@@ -86,7 +94,7 @@ class Pagenator:
                             'autor': architector_dir,
                             'files': _tmp
                         })
-        return final_listdir
+        return [final_listdir, incorrect_path]
 
     def _get_files_in_directory(self, files: list[str] | tuple[str], architector_dir: str = None,
                                 project_dir: str = None) -> dict:
