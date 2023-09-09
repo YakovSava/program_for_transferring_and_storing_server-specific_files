@@ -162,7 +162,7 @@ async function sendFilters() {
 				}
 				text += `<div class="main__image">
 		<img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
-		<a href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
+		<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
 		</div>`;
 				imgContainer.innerHTML = text;
 
@@ -226,11 +226,15 @@ async function autorize() {
 		alert('Неверный логин или пароль!');
 	}
 
+	var resp2 = await fetch(`api?method=checkCookies&data=${JSON.stringify(data)}`);
+	var response2 = await resp2.json();
 	var adminDiv = document.getElementById('to-admin');
 	if (response2.admin) {
 		adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
 	}
 	adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая страница</button>`
+
+	await checkCookie();
 }
 
 async function checkCookie() {
@@ -293,7 +297,7 @@ async function checkCookie() {
 			}
 			text += `<div class="main__image">
 	<img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
-	<a href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
+	<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
 	</div>`;
 			imgContainer.innerHTML = text;
 
@@ -346,7 +350,7 @@ async function helloVisitor() {
 		}
 		text += `<div class="main__image">
 <img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
-<a href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
+<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
 </div>`;
 		imgContainer.innerHTML = text;
 

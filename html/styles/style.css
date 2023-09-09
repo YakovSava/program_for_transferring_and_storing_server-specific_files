@@ -51,12 +51,39 @@ input {
   margin: 64px 0;
   display: block;
 }
+.main__images {
+  margin: 64px 0;
+  display: block;
+}
+
 .main__image {
   display: grid;
+/*  position: relative;*/
+  width: 350px;
+  height: 350px;
+  overflow: hidden;
 }
+
 .main__image img {
   border-radius: 16px;
+/*  position: absolute;*/
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  transition: all 0.3s ease;
 }
+
+.image-caption {
+/*  position: absolute;*/
+  bottom: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  padding: 8px;
+  transition: opacity 0.3s ease;
+}
+
 .main__image_block {
   display: flex;
   justify-content: space-between;
