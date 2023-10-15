@@ -20,6 +20,12 @@ def _split_a_string(string: str) -> dict:
 
     return path_parameters
 
+def _split_info(projectpath:str) -> str:
+    splitted_string = _split_a_string(projectpath)
+    return f"""Этажи: {splitted_string['floors']}endl
+Размеры: {splitted_string['size'][0]}x{splitted_string['size'][1]}endl
+Площадь: {splitted_string['area']}endl"""
+
 
 class Pagenator:
 
@@ -92,7 +98,8 @@ class Pagenator:
                         final_listdir.append({
                             'project': project_dir,
                             'autor': architector_dir,
-                            'files': _tmp
+                            'files': _tmp,
+                            'description': _split_info(project_dir)
                         })
         return [final_listdir, incorrect_path]
 

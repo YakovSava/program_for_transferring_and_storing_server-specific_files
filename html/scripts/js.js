@@ -18,6 +18,10 @@ function sendCookie(cookie) {
 	document.cookie = JSONToCookie(cookie);
 }
 
+function replacer(text) {
+	return text.replace(/endl/g, "\n");
+}
+
 function destroyGrid() {
 	let imagesGridElement = document.querySelector('.main__images');
 
@@ -162,7 +166,7 @@ async function sendFilters() {
 				}
 				text += `<div class="main__image">
 		<img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
-		<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
+		<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${replacer(response.response[0][i].description)}</a>
 		</div>`;
 				imgContainer.innerHTML = text;
 
@@ -297,7 +301,7 @@ async function checkCookie() {
 			}
 			text += `<div class="main__image">
 	<img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
-	<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
+	<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${replacer(response.response[0][i].description)}</a>
 	</div>`;
 			imgContainer.innerHTML = text;
 
@@ -350,7 +354,7 @@ async function helloVisitor() {
 		}
 		text += `<div class="main__image">
 <img src="${response.response[0][i].files.a3d}" id="img_${i}" onmouseover="this.src='${response.response[0][i].files.two}';" onmouseout="this.src='${response.response[0][i].files.a3d}';">
-<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${response.response[0][i].project} от ${response.response[0][i].autor}</a>
+<a class="image-caption" href="/picture/${response.response[0][i].autor}/${response.response[0][i].project}">${replacer(response.response[0][i].description)}</a>
 </div>`;
 		imgContainer.innerHTML = text;
 
