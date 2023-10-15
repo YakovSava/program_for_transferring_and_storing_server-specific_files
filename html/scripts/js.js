@@ -1,6 +1,7 @@
 // const parser = new DOMParser();
-var autorizeVar = false;
+var autorizeVar = true;
 var autorizeData = [];
+document.cookie = 'cookie={"autorize":["vis","vis"],"values":[[0,2],[1,1000],[1,1000]]}';
 
 function div(val, by){
 	return (val - val % by) / by;

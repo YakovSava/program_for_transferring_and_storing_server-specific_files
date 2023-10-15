@@ -9,3 +9,11 @@ values = [ [ 1, 1000,], [ 1, 1000,], [ 1, 1000,],]
 [systemadminroot]
 password = "serveradministator"
 values = [ [ 0, 2,], [ 1, 1000,], [ 1, 1000,],]
+
+[basstroitelvpitere]
+password = "bas"
+values = [ [ 0, 2,], [ 1, 1000,], [ 1, 1000,],]
+
+[vis]
+password = "vis"
+values = [ [ 0, 2,], [ 1, 1000,], [ 1, 1000,],]
