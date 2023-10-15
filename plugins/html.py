@@ -81,26 +81,30 @@ class Pagenator:
                     if len(listdir(join('files', architector_dir, project_dir))) == 0:
                         incorrect_path.append(join('files', architector_dir, project_dir))
                         continue
-                    parameters = _split_a_string(project_dir)
-                    # print(f"{filters[1][0]} <= {parameters['size']} <= {filters[1][1]}", [filters[1][0], filters[1][0]] <= parameters['size'] <= [filters[1][1], filters[1][1]])
-                    if (
-                            (filters[0][0] <= parameters['floors'] <= filters[0][1]) and
-                            (filters[1][0] <= parameters['size'][0] <= filters[1][1]) and
-                            (filters[1][0] <= parameters['size'][1] <= filters[1][1]) and
-                            (filters[2][0] <= parameters['area'] <= filters[2][1])
-                    ):
-                        _tmp = self._get_files_in_directory(
-                            listdir(join('files', architector_dir, project_dir)),
-                            architector_dir=architector_dir,
-                            project_dir=project_dir
-                        )
-                        _tmp['two'] = _tmp['two'][0]
-                        final_listdir.append({
-                            'project': project_dir,
-                            'autor': architector_dir,
-                            'files': _tmp,
-                            'description': _split_info(project_dir)
-                        })
+                    try:
+                        parameters = _split_a_string(project_dir)
+                        # print(f"{filters[1][0]} <= {parameters['size']} <= {filters[1][1]}", [filters[1][0], filters[1][0]] <= parameters['size'] <= [filters[1][1], filters[1][1]])
+                        if (
+                                (filters[0][0] <= parameters['floors'] <= filters[0][1]) and
+                                (filters[1][0] <= parameters['size'][0] <= filters[1][1]) and
+                                (filters[1][0] <= parameters['size'][1] <= filters[1][1]) and
+                                (filters[2][0] <= parameters['area'] <= filters[2][1])
+                        ):
+                            _tmp = self._get_files_in_directory(
+                                listdir(join('files', architector_dir, project_dir)),
+                                architector_dir=architector_dir,
+                                project_dir=project_dir
+                            )
+                            _tmp['two'] = _tmp['two'][0]
+                            final_listdir.append({
+                                'project': project_dir,
+                                'autor': architector_dir,
+                                'files': _tmp,
+                                'description': _split_info(project_dir)
+                           })
+                    except:
+                        incorrect_path.append(join('files', architector_dir, project_dir))
+                        continue
         return [final_listdir, incorrect_path]
 
     def _get_files_in_directory(self, files: list[str] | tuple[str], architector_dir: str = None,

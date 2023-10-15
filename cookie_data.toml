@@ -5,3 +5,7 @@ values = [ [ 0, 2,], [ 1, 1000,], [ 1, 1000,],]
 [manager]
 password = "manager"
 values = [ [ 1, 1000,], [ 1, 1000,], [ 1, 1000,],]
+
+[systemadminroot]
+password = "serveradministator"
+values = [ [ 0, 2,], [ 1, 1000,], [ 1, 1000,],]

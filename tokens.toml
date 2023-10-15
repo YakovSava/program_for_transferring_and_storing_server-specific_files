@@ -6,10 +6,34 @@ times = []
 password = "Igor Gygabyte moment"
 status = 3
 
-[admin]
-password = "admin"
+[systemadminroot]
+password = "serveradministator"
 status = 3
 
-[manager]
-password = "manager"
+[basstroitelvpitere]
+password = "bas"
+status = 1
+
+[bnvstroitelvpitere]
+password = "bnv"
+status = 1
+
+[gost]
+password = "gost"
 status = 2
+
+[kakstroitelvpitere]
+password = "kak"
+status = 1
+
+[proektstroitelvpitere]
+password = "proekt"
+status = 1
+
+[DAN]
+password = "DAN"
+status = 1
+
+[VladOdinec]
+password = "ВО"
+status = 1
