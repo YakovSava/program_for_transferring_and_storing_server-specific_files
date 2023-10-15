@@ -130,7 +130,7 @@ function shareLink() {
 
 async function sendFilters() {
 	destroyGrid();
-	if (autorizeVar) {
+	if (autorizeVar || checkVisitor()) {
 		let i = -1;
 		let filterArray = [];
 		let result = [];
@@ -333,13 +333,17 @@ async function checkCookie() {
 async function helloVisitor() {
 	let visitorData = JSON.parse(decodeURIComponent(document.location.search.slice(1)));
 
-	let filterPanel = document.getElementById('table__form');
-	filterPanel.parentNode.removeChild(filterPanel);
+	// let filterPanel = document.getElementById('table__form');
+	// filterPanel.parentNode.removeChild(filterPanel);
 
 	let data = {
 			user: "apiKey",
 			password: "Igor Gygabyte moment",
-			filters: visitorData.filters
+			filters: [
+				[0, 1000],
+				[0, 1000],
+				[0, 1000]
+			]
 		};
 
 	let resp = await fetch(`api?method=getFilesList&data=${JSON.stringify(data)}`);
