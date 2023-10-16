@@ -131,7 +131,7 @@ function shareLink() {
 
 async function sendFilters() {
 	destroyGrid();
-	if (autorizeVar || checkVisitor()) {
+	if (autorizeVar) {
 		let i = -1;
 		let filterArray = [];
 		let result = [];
@@ -243,36 +243,36 @@ async function autorize() {
 }
 
 async function checkCookie() {
-	let data = {
-		user: 'apiKey',
-		password: 'Igor Gygabyte moment',
-		cookie: cookieToJSON(document.cookie)
-	};
+	// let data = {
+	// 	user: 'apiKey',
+	// 	password: 'Igor Gygabyte moment',
+	// 	cookie: cookieToJSON(document.cookie)
+	// };
 
-	var resp = await fetch(`api?method=checkCookies&data=${JSON.stringify(data)}`);
-	var response = await resp.json();
+	// var resp = await fetch(`api?method=checkCookies&data=${JSON.stringify(data)}`);
+	// var response = await resp.json();
 
-	if (response.response) {
-		let data2 = {
-			user: 'apiKey',
-			password: 'Igor Gygabyte moment',
-			cookie: cookieToJSON(document.cookie)
-		};
+	// if (response.response) {
+	// 	let data2 = {
+	// 		user: 'apiKey',
+	// 		password: 'Igor Gygabyte moment',
+	// 		cookie: cookieToJSON(document.cookie)
+	// 	};
 
 		var resp2 = await fetch(`api?method=checkCookies&data=${JSON.stringify(data2)}`);
 		let response2 = await resp2.json();
 
-		autorizeVar = true;
-		autorizeData = data2.cookie.autorize;
+		// autorizeVar = true;
+		// autorizeData = data2.cookie.autorize;
 
-		let btn = document.getElementById('btn btn-dark header__btn_1');
-		btn.innerHTML = "Вы вошли!";
+		// let btn = document.getElementById('btn btn-dark header__btn_1');
+		// btn.innerHTML = "Вы вошли!";
 
-		var adminDiv = document.getElementById('to-admin');
-		if (response2.admin) {
-			adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
-		}
-		adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая страница</button>`
+		// var adminDiv = document.getElementById('to-admin');
+		// if (response2.admin) {
+		// 	adminDiv.innerHTML = `<a class="btn btn-secondary" href="${document.location.protocol}//${document.location.host}/admin">Manager panel</a>`;
+		// }
+		// adminDiv.innerHTML += `<button class="btn btn-secondary" onclick="shareLink()">Гостевая страница</button>`
 
 		var inputs = document.querySelectorAll('input');
 
@@ -291,7 +291,7 @@ async function checkCookie() {
 			]
 		};
 		let resp = await fetch(`api?method=getFilesList&data=${JSON.stringify(data)}`);
-		let response = await resp.json();
+		var response = await resp.json();
 
 		var imgContainer = document.querySelector('.main__images');
 		var text = '';
@@ -329,7 +329,7 @@ async function checkCookie() {
 			}
 		}
 	}
-}
+// }
 
 async function helloVisitor() {
 	let visitorData = JSON.parse(decodeURIComponent(document.location.search.slice(1)));
@@ -337,14 +337,18 @@ async function helloVisitor() {
 	// let filterPanel = document.getElementById('table__form');
 	// filterPanel.parentNode.removeChild(filterPanel);
 
+	var inputs = document.querySelectorAll('input');
+
+	var flattedFilters = visitorData.filters.flat();
+
+	for (let i = 0; i < inputs.length; i++) {
+		inputs[i].value = flattedFilters[i];
+	}
+
 	let data = {
 			user: "apiKey",
 			password: "Igor Gygabyte moment",
-			filters: [
-				[0, 1000],
-				[0, 1000],
-				[0, 1000]
-			]
+			filters: visitorData.filters
 		};
 
 	let resp = await fetch(`api?method=getFilesList&data=${JSON.stringify(data)}`);
@@ -383,18 +387,29 @@ sendButton.addEventListener('click', function() {
 });
 
 var inputFields = document.querySelectorAll('input');
-for (let i = 0; i < inputFields.length; i++) {
-	if ((inputFields[i].id !== 'username') && (inputFields[i].id !== 'password')) {
-		inputFields[i].addEventListener('change', function() {
-			sendFilters().then();
-		});
+	for (let i = 0; i < inputFields.length; i++) {
+		if ((inputFields[i].id !== 'username') && (inputFields[i].id !== 'password')) {
+			inputFields[i].addEventListener('change', function() {
+				sendFilters().then();
+			});
+		}
 	}
-}
 
+// console.log(checkVisitor());
 if (checkVisitor()) {
 	helloVisitor()
 		.then();
 } else {
-	checkCookie()
-		.then();
+	sendFilters().then();
+
+	var inputs = document.querySelectorAll('input');
+
+	for (let i = 0; i < inputs.length-2; i += 2) {
+		inputs[i].value = 0;
+		inputs[i+1].value = 1000;
+	}
 }
+
+//checkCookie()
+//	.then();
+// }
